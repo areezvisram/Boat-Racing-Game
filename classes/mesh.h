@@ -5,19 +5,15 @@
 #include "mathLib3D.h"
 #include "face.h"
 
-// struct Face
-// {
-//     int vertexIndex;
-//     int normalIndex;
-// };
+using std::vector;
 
 class Mesh
 {
 public:
-    Mesh();
-    std::vector<Point3D> VBO;   //vertex buffer object
-    std::vector<Point3D> NBO;   //normal buffer object
-    std::vector<Face> faces;    //faces
+    Mesh(vector<Point3D> VBO, vector<Point3D> NBO, vector<Face> faces);
+    vector<Point3D> VBO;   //vertex buffer object
+    vector<Point3D> NBO;   //normal buffer object
+    vector<Face> faces;    //faces
 };
 
 #endif
