@@ -11,11 +11,16 @@
 #endif
 
 #include <iostream>
+#include <vector>
 #include <random>
+#include <string>
+#include <fstream>
+#include "classes/mathLib3D.h"
+#include "classes/event.h"
 
 // Global variables
-float GLOBAL_WIDTH = 800;
-float GLOBAL_HEIGHT = 800;
+float GLOBAL_WIDTH = 500;
+float GLOBAL_HEIGHT = 500;
 
 // Display function
 void display(void)
@@ -46,14 +51,41 @@ void reshape(int w, int h) {
     glViewport(0, 0, w, h);    
 }
 
+void keyboard(unsigned char key, int x, int y)
+{
+    switch(key){
+        case 'q':
+            exit(0);
+            break;
+    }
+}
+
+void timer(int value)
+{   
+    glutPostRedisplay();
+    glutTimerFunc(17, timer, 0);
+}
+
+void initGlut()
+{
+    glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
+    glutCreateWindow("Final Project"); 
+    // glutReshapeFunc(reshape);
+    glutKeyboardFunc(Event::keyboard);
+    glutDisplayFunc(display); 
+    glutTimerFunc(17, timer, 0);  
+}
+
+void init()
+{
+    initGlut();
+}
+
 // main function - entry of the program
 int main(int argc, char** argv)
 {                
     glutInit(&argc, argv);
-    glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutCreateWindow("Final Project"); 
-    glutReshapeFunc(reshape);
-    glutDisplayFunc(display);   
+    init();
     glutMainLoop();
 
     return (0);
