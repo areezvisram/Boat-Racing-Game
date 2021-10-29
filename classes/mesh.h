@@ -2,18 +2,20 @@
 #define MESH_H
 
 #include <vector>
+#include <string>
 #include "mathLib3D.h"
 #include "face.h"
-
-using std::vector;
 
 class Mesh
 {
 public:
-    Mesh(vector<Point3D> VBO, vector<Point3D> NBO, vector<Face> faces);
-    vector<Point3D> VBO;   //vertex buffer object
-    vector<Point3D> NBO;   //normal buffer object
-    vector<Face> faces;    //faces
+    Mesh(std::vector<Point3D> VBO, std::vector<Point3D> NBO, std::vector<Face> faces);
+    std::vector<Point3D> VBO;   //vertex buffer object
+    std::vector<Point3D> NBO;   //normal buffer object
+    std::vector<Face> faces;    //faces
+    std::string name;           //object name usually taken from .obj file
+
+    static Mesh createFromOBJ(std::string filePath);
 };
 
 #endif

@@ -17,6 +17,7 @@
 #include <fstream>
 #include "classes/mathLib3D.h"
 #include "classes/event.h"
+#include "classes/mesh.h"
 
 // Global variables
 float GLOBAL_WIDTH = 500;
@@ -50,16 +51,6 @@ void reshape(int w, int h)
 
     glMatrixMode(GL_MODELVIEW);
     glViewport(0, 0, w, h);
-}
-
-void keyboard(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
-    case 'q':
-        exit(0);
-        break;
-    }
 }
 
 void timer(int value)
@@ -100,6 +91,9 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     init();
+
+    // Mesh::createFromOBJ("cube.obj");
+
     glutMainLoop();
 
     return (0);

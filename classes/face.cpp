@@ -1,7 +1,6 @@
 #include "face.h"
 
-Face::Face(int vi, int ni)
+Face::Face(std::vector<MeshPoint> meshPoints)
 {
-    this->vi = vi;
-    this->ni = ni;
+    this->meshPoints = meshPoints;
 }
