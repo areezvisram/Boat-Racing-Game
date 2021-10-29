@@ -1,13 +1,13 @@
 #ifdef __APPLE__
-#  define GL_SILENCE_DEPRECATION
-#  include <OpenGL/gl.h>
-#  include <OpenGL/glu.h>
-#  include <GLUT/glut.h>
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
 #else
-#  include <windows.h>
-#  include <GL/gl.h>
-#  include <GL/glu.h>
-#  include <GL/freeglut.h>
+#include <windows.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/freeglut.h>
 #endif
 
 #include <iostream>
@@ -25,43 +25,45 @@ float GLOBAL_HEIGHT = 500;
 // Display function
 void display(void)
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(10, 10, 10, 0, 0, 0, 0, 1, 0);
 
-	glBegin(GL_POLYGON);
-	glColor3f(0, 1, 0);
-	glVertex2f(-0.5, -0.5);
-	glVertex2f(0.5, -0.5);
-	glVertex2f(0.5, 0.5);
-	glVertex2f(-0.5, 0.5);
-	glEnd();
+    glPushMatrix();
+    glColor3f(0.7, 0.1, 0);
+    glutSolidCube(2);
+    glPopMatrix();
 
-    glFlush();
+    glutSwapBuffers();
 }
 
 // Reshape function
-void reshape(int w, int h) {    
+void reshape(int w, int h)
+{
     GLOBAL_WIDTH = w;
     GLOBAL_HEIGHT = h;
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, w, 0, h);    
+    gluOrtho2D(0, w, 0, h);
 
     glMatrixMode(GL_MODELVIEW);
-    glViewport(0, 0, w, h);    
+    glViewport(0, 0, w, h);
 }
 
 void keyboard(unsigned char key, int x, int y)
 {
-    switch(key){
-        case 'q':
-            exit(0);
-            break;
+    switch (key)
+    {
+    case 'q':
+        exit(0);
+        break;
     }
 }
 
 void timer(int value)
-{   
+{
     glutPostRedisplay();
     glutTimerFunc(17, timer, 0);
 }
@@ -69,11 +71,23 @@ void timer(int value)
 void initGlut()
 {
     glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutCreateWindow("Final Project"); 
+    glutInitWindowPosition(50, 50);
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+    glutCreateWindow("Final Project");
     // glutReshapeFunc(reshape);
     glutKeyboardFunc(Event::keyboard);
-    glutDisplayFunc(display); 
-    glutTimerFunc(17, timer, 0);  
+    glutDisplayFunc(display);
+    glutTimerFunc(17, timer, 0);
+
+    glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CW);
+    glCullFace(GL_FRONT);
+    glEnable(GL_CULL_FACE);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45, 1, 1, 100);
+    glClearColor(0.3, 0.3, 0.3, 0.3);
 }
 
 void init()
@@ -82,8 +96,8 @@ void init()
 }
 
 // main function - entry of the program
-int main(int argc, char** argv)
-{                
+int main(int argc, char **argv)
+{
     glutInit(&argc, argv);
     init();
     glutMainLoop();
