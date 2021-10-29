@@ -12,6 +12,10 @@ Mesh::Mesh(std::vector<Point3D> VBO, std::vector<Point3D> NBO, std::vector<Face>
     this->name = name;
 }
 
+/*
+https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+Used to split string by spaces
+*/
 Mesh Mesh::createFromOBJ(std::string filePath)
 {
     std::vector<Point3D> verts;
