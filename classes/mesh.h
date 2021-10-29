@@ -1,23 +1,23 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <vector>
 #include "mathLib3D.h"
-#include "vector"
+#include "face.h"
 
-struct Face
-{
-    int vertexIndex;
-    int normalIndex;
-};
+// struct Face
+// {
+//     int vertexIndex;
+//     int normalIndex;
+// };
 
 class Mesh
 {
-private:
+public:
+    Mesh();
     std::vector<Point3D> VBO;   //vertex buffer object
     std::vector<Point3D> NBO;   //normal buffer object
     std::vector<Face> faces;    //faces
-public:
-    Mesh();
 };
 
 #endif
