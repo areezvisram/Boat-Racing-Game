@@ -23,10 +23,13 @@ else
 	        LDFLAGS = -framework Carbon -framework OpenGL -framework GLUT
 	endif
 endif
-all: main
+all: clean main run
 
 main:
 	$(CC) -o main main.cpp $(CFLAGS) $(LDFLAGS)
+
+run:
+	./main
 
 clean:
 	rm -f main
