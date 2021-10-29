@@ -9,6 +9,6 @@ class Face
 public:
     Face(std::vector<MeshPoint> meshPoints);
     std::vector<MeshPoint> meshPoints;
-};  
+};
 
 #endif

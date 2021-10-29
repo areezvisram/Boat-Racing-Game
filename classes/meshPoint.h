@@ -7,6 +7,6 @@ public:
     MeshPoint(int vi, int ni);
     int vi;
     int ni;
-};  
+};
 
 #endif

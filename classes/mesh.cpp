@@ -19,19 +19,19 @@ Mesh Mesh::createFromOBJ(std::string filePath)
     std::vector<Face> faces;
 
     std::string line;
-    std::ifstream file (filePath);
-    if(file.is_open())
+    std::ifstream file(filePath);
+    if (file.is_open())
     {
         std::cout << filePath << std::endl;
         std::getline(file, line);
         std::cout << line << std::endl;
-        while(std::getline(file, line))
+        while (std::getline(file, line))
         {
-            // cout << line << endl;
             long long unsigned int pos = 0;
             std::vector<std::string> tokens;
             std::string token;
-            while ((pos = line.find(" ")) != std::string::npos) {
+            while ((pos = line.find(" ")) != std::string::npos)
+            {
                 token = line.substr(0, pos);
                 tokens.push_back(token);
                 line.erase(0, pos + 1);
@@ -40,31 +40,30 @@ Mesh Mesh::createFromOBJ(std::string filePath)
 
             std::string first = tokens.at(0);
             if (first.compare("v") == 0)
-            {   
-                // std::vector<float> vert;
+            {
                 float x = std::stof(tokens.at(1));
                 float y = std::stof(tokens.at(2));
                 float z = std::stof(tokens.at(3));
-                verts.push_back(Point3D(x,y,z));
+                verts.push_back(Point3D(x, y, z));
             }
             else if (first.compare("vn") == 0)
             {
-                // std::vector<float> norm;
                 float x = std::stof(tokens.at(1));
                 float y = std::stof(tokens.at(2));
-                float z = std::stof(tokens.at(3));   
-                norms.push_back(Point3D(x,y,z));
+                float z = std::stof(tokens.at(3));
+                norms.push_back(Point3D(x, y, z));
             }
             else if (first.compare("f") == 0)
             {
                 std::vector<MeshPoint> meshPoints;
-                for(long long unsigned int i = 1; i < tokens.size(); i++)
+                for (long long unsigned int i = 1; i < tokens.size(); i++)
                 {
                     long long unsigned int facePos = 0;
                     std::vector<std::string> faceTokens;
                     std::string faceToken;
                     std::string faceData = tokens.at(i);
-                    while ((facePos = faceData.find("/")) != std::string::npos) {
+                    while ((facePos = faceData.find("/")) != std::string::npos)
+                    {
                         faceToken = faceData.substr(0, facePos);
                         faceTokens.push_back(faceToken);
                         faceData.erase(0, facePos + 1);
@@ -73,7 +72,7 @@ Mesh Mesh::createFromOBJ(std::string filePath)
 
                     int vi = std::stoi(faceTokens.at(0));
                     int ni = std::stoi(faceTokens.at(2));
-                    meshPoints.push_back(MeshPoint(vi,ni));
+                    meshPoints.push_back(MeshPoint(vi, ni));
                 }
                 faces.push_back(Face(meshPoints));
             }
