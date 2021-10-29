@@ -26,7 +26,7 @@ endif
 all: clean main run
 
 main:
-	$(CC) -o main main.cpp $(CFLAGS) $(LDFLAGS)
+	$(CC) -o main main.cpp classes/*.cpp $(CFLAGS) $(LDFLAGS)
 
 run:
 	./main
