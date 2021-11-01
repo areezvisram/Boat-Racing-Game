@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
-#include "mesh.h"
-#include "face.h"
-#include "meshPoint.h"
+#include <mesh.h>
+#include <face.h>
+#include <meshPoint.h>
 
 Mesh::Mesh(std::vector<Point3D> VBO, std::vector<Point3D> NBO, std::vector<Face> faces)
 {

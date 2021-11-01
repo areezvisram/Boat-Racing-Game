@@ -15,9 +15,9 @@
 #include <random>
 #include <string>
 #include <fstream>
-#include "classes/mathLib3D.h"
-#include "classes/event.h"
-#include "classes/mesh.h"
+#include <mathLib3D.h>
+#include <event.h>
+#include <mesh.h>
 
 // Global variables
 float GLOBAL_WIDTH = 500;

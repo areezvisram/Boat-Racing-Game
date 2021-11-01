@@ -1,5 +1,5 @@
 #include <cmath>
-#include "mathLib3D.h"
+#include <mathLib3D.h>
 
 //Point3D
 Point3D::Point3D()
