@@ -23,6 +23,10 @@ float Point3D::fastDistanceTo(Point3D other)
 {
     return pow(other.x - x, 2.0) + pow(other.y - y, 2.0) + pow(other.z - z, 2.0);
 }
+std::string Point3D::toString()
+{
+    return "Point(" + std::to_string(x) + ", " +  std::to_string(y) + ", " +  std::to_string(z) + ")";
+}
 
 //Vec3D
 Vec3D::Vec3D()
@@ -60,6 +64,10 @@ Vec3D Vec3D::add(Vec3D vec)
 Point3D Vec3D::movePoint(Point3D source)
 {
     return Point3D(source.x + x, source.y + y, source.z + z);
+}
+std::string Vec3D::toString()
+{
+    return "Vector(" + std::to_string(x) + ", " +  std::to_string(y) + ", " +  std::to_string(z) + ")";
 }
 Vec3D Vec3D::createVector(Point3D p1, Point3D p2)
 {

@@ -1,6 +1,8 @@
 #ifndef MATHLIB_3D_H
 #define MATHLIB_3D_H
 
+#include <string>
+
 class Point3D
 {
 public:
@@ -12,6 +14,7 @@ public:
 
     float distanceTo(Point3D other);
     float fastDistanceTo(Point3D other);
+    std::string toString();
 };
 
 class Vec3D
@@ -27,6 +30,7 @@ public:
     Vec3D multiply(float scalar);
     Vec3D add(Vec3D vec);
     Point3D movePoint(Point3D source);
+    std::string toString();
     static Vec3D createVector(Point3D p1, Point3D p2);
     static float dot(Vec3D v1, Vec3D v2);
     static Vec3D cross(Vec3D v1, Vec3D v2);
