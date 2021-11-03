@@ -1,8 +1,28 @@
+#ifdef __APPLE__
+    #define GL_SILENCE_DEPRECATION
+    #include <OpenGL/gl.h>
+    #include <OpenGL/glu.h>
+    #include <GLUT/glut.h>
+#else
+    #include <windows.h>
+    #include <GL/gl.h>
+    #include <GL/glu.h>
+    #include <GL/freeglut.h>
+#endif
+
 #include <fstream>
 #include <iostream>
 #include <mesh.h>
 #include <face.h>
 #include <meshPoint.h>
+
+Mesh::Mesh()
+{
+    VBO = std::vector<Point3D>();
+    NBO = std::vector<Point3D>();
+    faces = std::vector<Face>();
+    name = "";
+}
 
 Mesh::Mesh(std::vector<Point3D> VBO, std::vector<Point3D> NBO, std::vector<Face> faces)
 {
@@ -10,6 +30,48 @@ Mesh::Mesh(std::vector<Point3D> VBO, std::vector<Point3D> NBO, std::vector<Face>
     this->NBO = NBO;
     this->faces = faces;
     this->name = name;
+}
+
+void Mesh::draw(bool showNormals)
+{
+    for (size_t i = 0; i < faces.size(); i++)
+    {
+        glBegin(GL_POLYGON);
+        for (size_t j = 0; j < faces.at(i).meshPoints.size(); j++)
+        {
+            MeshPoint mp = faces.at(i).meshPoints.at(j);
+
+            Point3D v = VBO.at(mp.vi);
+            Point3D n = NBO.at(mp.ni);
+            Vec3D normal = Vec3D::createVector(Point3D(0,0,0), n).normalize();
+            glNormal3f(normal.x, normal.y, normal.z);
+            glVertex3f(v.x, v.y, v.z);
+        }
+        glEnd();
+    }
+
+    // draw normals for debug purposes if enabled (disabled by default)
+    if (showNormals)
+    {
+        for (size_t i = 0; i < faces.size(); i++)
+        {
+            for (size_t j = 0; j < faces.at(i).meshPoints.size(); j++)
+            {
+                MeshPoint mp = faces.at(i).meshPoints.at(j);
+
+                Point3D v = VBO.at(mp.vi);
+                Point3D n = NBO.at(mp.ni);
+                Vec3D normal = Vec3D::createVector(Point3D(0,0,0), n).normalize();
+                Point3D end = normal.movePoint(v);
+
+                glBegin(GL_LINES);
+                glVertex3f(v.x, v.y, v.z);
+                glVertex3f(end.x, end.y, end.z);
+                glEnd();
+
+            }
+        }
+    }
 }
 
 /*
@@ -26,9 +88,7 @@ Mesh Mesh::createFromOBJ(std::string filePath)
     std::ifstream file(filePath);
     if (file.is_open())
     {
-        std::cout << filePath << std::endl;
         std::getline(file, line);
-        std::cout << line << std::endl;
         while (std::getline(file, line))
         {
             long long unsigned int pos = 0;
@@ -74,8 +134,8 @@ Mesh Mesh::createFromOBJ(std::string filePath)
                     }
                     faceTokens.push_back(faceData);
 
-                    int vi = std::stoi(faceTokens.at(0));
-                    int ni = std::stoi(faceTokens.at(2));
+                    int vi = std::stoi(faceTokens.at(0))-1;
+                    int ni = std::stoi(faceTokens.at(2))-1;
                     meshPoints.push_back(MeshPoint(vi, ni));
                 }
                 faces.push_back(Face(meshPoints));
@@ -84,8 +144,5 @@ Mesh Mesh::createFromOBJ(std::string filePath)
     }
 
     file.close();
-    std::vector<Point3D> v;
-    std::vector<Point3D> n;
-    std::vector<Face> f;
-    return Mesh(v, n, f);
+    return Mesh(verts, norms, faces);
 }

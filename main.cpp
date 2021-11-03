@@ -23,6 +23,13 @@
 float GLOBAL_WIDTH = 500;
 float GLOBAL_HEIGHT = 500;
 
+Mesh mesh;
+
+float lightPos[4] = {0, 10, 0, 1};
+float lightAmb[4] = {0.2, 0.2, 0.2, 1};
+float lightDiff[4] = {1, 1, 1, 1};
+float lightSpec[4] = {1, 1, 1, 1};
+
 // Display function
 void display(void)
 {
@@ -33,8 +40,13 @@ void display(void)
 
     glPushMatrix();
     glColor3f(0.7, 0.1, 0);
-    glutSolidCube(2);
+    mesh.draw();
     glPopMatrix();
+
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
 
     glutSwapBuffers();
 }
@@ -47,7 +59,7 @@ void reshape(int w, int h)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0, w, 0, h);
+    gluPerspective(45, (int)GLOBAL_WIDTH / GLOBAL_HEIGHT, 1, 100);
 
     glMatrixMode(GL_MODELVIEW);
     glViewport(0, 0, w, h);
@@ -65,25 +77,23 @@ void initGlut()
     glutInitWindowPosition(50, 50);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
     glutCreateWindow("Final Project");
-    // glutReshapeFunc(reshape);
+    glutReshapeFunc(reshape);
     glutKeyboardFunc(Event::keyboard);
     glutDisplayFunc(display);
     glutTimerFunc(17, timer, 0);
 
-    glEnable(GL_DEPTH_TEST);
-    glFrontFace(GL_CW);
-    glCullFace(GL_FRONT);
-    glEnable(GL_CULL_FACE);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45, 1, 1, 100);
-    glClearColor(0.3, 0.3, 0.3, 0.3);
 }
 
 void init()
 {
     initGlut();
+    glClearColor(0.3, 0.3, 0.3, 0.3);
+    glEnable(GL_DEPTH_TEST);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 }
 
 // main function - entry of the program
@@ -92,7 +102,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
 
-    // Mesh::createFromOBJ("cube.obj");
+    mesh = Mesh::createFromOBJ("boat.obj");
 
     glutMainLoop();
 
