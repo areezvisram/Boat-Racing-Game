@@ -50,7 +50,7 @@ void display(void)
     glRotated(upgrade.rot.y, 0,1,0);
     glRotated(upgrade.rot.z, 0,0,1);
     glColor3f(0.7, 0.1, 0);
-    mesh.draw();
+    upgrade.draw();
     glPopMatrix();
 
     glutSwapBuffers();
@@ -107,8 +107,8 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
 
-    // upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/boat.obj"), Vec3D(0,1,0));
-    mesh = Mesh::createFromOBJ("obj/boat.obj");
+     upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
+    //mesh = Mesh::createFromOBJ("obj/boat.obj");
 
     glutMainLoop();
 
