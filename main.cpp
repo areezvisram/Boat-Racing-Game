@@ -17,7 +17,7 @@
 #include <fstream>
 #include <mathLib3D.h>
 #include <event.h>
-#include <mesh.h>
+#include <mesh/mesh.h>
 
 // Global variables
 float GLOBAL_WIDTH = 500;

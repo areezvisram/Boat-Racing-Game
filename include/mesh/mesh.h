@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 #include <mathLib3D.h>
-#include <face.h>
+#include <mesh/face.h>
 
 class Mesh
 {

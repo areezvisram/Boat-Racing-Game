@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 #include <mathLib3D.h>
-#include <mesh.h>
+#include <mesh/mesh.h>
 
 class Object
 {

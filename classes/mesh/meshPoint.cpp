@@ -1,4 +1,4 @@
-#include <meshPoint.h>
+#include <mesh/meshPoint.h>
 
 MeshPoint::MeshPoint(int vi, int ni)
 {

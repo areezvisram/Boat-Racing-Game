@@ -12,9 +12,9 @@
 
 #include <fstream>
 #include <iostream>
-#include <mesh.h>
-#include <face.h>
-#include <meshPoint.h>
+#include <mesh/mesh.h>
+#include <mesh/face.h>
+#include <mesh/meshPoint.h>
 
 Mesh::Mesh()
 {

@@ -2,7 +2,7 @@
 #define FACE_H
 
 #include <vector>
-#include <meshPoint.h>
+#include <mesh/meshPoint.h>
 
 class Face
 {

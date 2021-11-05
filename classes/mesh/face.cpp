@@ -1,4 +1,4 @@
-#include <face.h>
+#include <mesh/face.h>
 
 Face::Face(std::vector<MeshPoint> meshPoints)
 {
