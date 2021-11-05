@@ -39,8 +39,9 @@ void display(void)
     gluLookAt(10, 10, 10, 0, 0, 0, 0, 1, 0);
 
     glPushMatrix();
+    glTranslatef(5,0,0);
     glColor3f(0.7, 0.1, 0);
-    mesh.draw();
+    mesh.draw(true);
     glPopMatrix();
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
@@ -102,7 +103,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
 
-    mesh = Mesh::createFromOBJ("boat.obj");
+    mesh = Mesh::createFromOBJ("obj/upgrade.obj");
 
     glutMainLoop();
 
