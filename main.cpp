@@ -18,12 +18,14 @@
 #include <mathLib3D.h>
 #include <event.h>
 #include <mesh/mesh.h>
+#include <object/upgrade.h>
 
 // Global variables
 float GLOBAL_WIDTH = 500;
 float GLOBAL_HEIGHT = 500;
 
 Mesh mesh;
+Upgrade upgrade;
 
 float lightPos[4] = {0, 10, 0, 1};
 float lightAmb[4] = {0.2, 0.2, 0.2, 1};
@@ -39,9 +41,11 @@ void display(void)
     gluLookAt(10, 10, 10, 0, 0, 0, 0, 1, 0);
 
     glPushMatrix();
-    glTranslatef(5,0,0);
+    glRotated(upgrade.rot.x, 1,0,0);
+    glRotated(upgrade.rot.y, 0,1,0);
+    glRotated(upgrade.rot.z, 0,0,1);
     glColor3f(0.7, 0.1, 0);
-    mesh.draw(true);
+    upgrade.draw();
     glPopMatrix();
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
@@ -69,6 +73,7 @@ void reshape(int w, int h)
 void timer(int value)
 {
     glutPostRedisplay();
+    upgrade.update();
     glutTimerFunc(17, timer, 0);
 }
 
@@ -103,7 +108,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
 
-    mesh = Mesh::createFromOBJ("obj/upgrade.obj");
+    upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
 
     glutMainLoop();
 
