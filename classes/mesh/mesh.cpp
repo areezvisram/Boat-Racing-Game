@@ -29,7 +29,7 @@ Mesh::Mesh(std::vector<Point3D> VBO, std::vector<Point3D> NBO, std::vector<Face>
     this->VBO = VBO;
     this->NBO = NBO;
     this->faces = faces;
-    this->name = name;
+    this->name = "";
 }
 
 void Mesh::draw(bool showNormals)

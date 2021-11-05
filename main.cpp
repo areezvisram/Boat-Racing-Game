@@ -40,18 +40,18 @@ void display(void)
     glLoadIdentity();
     gluLookAt(10, 10, 10, 0, 0, 0, 0, 1, 0);
 
-    glPushMatrix();
-    glRotated(upgrade.rot.x, 1,0,0);
-    glRotated(upgrade.rot.y, 0,1,0);
-    glRotated(upgrade.rot.z, 0,0,1);
-    glColor3f(0.7, 0.1, 0);    
-    upgrade.draw();
-    glPopMatrix();
-
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
+
+    glPushMatrix();
+    glRotated(upgrade.rot.x, 1,0,0);
+    glRotated(upgrade.rot.y, 0,1,0);
+    glRotated(upgrade.rot.z, 0,0,1);
+    glColor3f(0.7, 0.1, 0);
+    mesh.draw();
+    glPopMatrix();
 
     glutSwapBuffers();
 }
@@ -107,7 +107,8 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
 
-    upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/boat.obj"), Vec3D(0,1,0));        
+    // upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/boat.obj"), Vec3D(0,1,0));
+    mesh = Mesh::createFromOBJ("obj/boat.obj");
 
     glutMainLoop();
 
