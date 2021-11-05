@@ -1,5 +1,5 @@
-#include <windows.h>
 #include <event.h>
+#include <iostream>
 
 void Event::keyboard(unsigned char key, int x, int y)
 {
