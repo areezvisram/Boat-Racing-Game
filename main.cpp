@@ -44,7 +44,7 @@ void display(void)
     glRotated(upgrade.rot.x, 1,0,0);
     glRotated(upgrade.rot.y, 0,1,0);
     glRotated(upgrade.rot.z, 0,0,1);
-    glColor3f(0.7, 0.1, 0);
+    glColor3f(0.7, 0.1, 0);    
     upgrade.draw();
     glPopMatrix();
 
@@ -64,7 +64,7 @@ void reshape(int w, int h)
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45, (int)GLOBAL_WIDTH / GLOBAL_HEIGHT, 1, 100);
+    gluPerspective(45, (float)w / h, 1, 100);
 
     glMatrixMode(GL_MODELVIEW);
     glViewport(0, 0, w, h);
@@ -72,34 +72,33 @@ void reshape(int w, int h)
 
 void timer(int value)
 {
-    glutPostRedisplay();
     upgrade.update();
+    glutPostRedisplay();    
     glutTimerFunc(17, timer, 0);
 }
 
 void initGlut()
 {
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);    
     glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutInitWindowPosition(50, 50);
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-    glutCreateWindow("Final Project");
+    glutInitWindowPosition(2000, 50);    
+    glutCreateWindow("Final Project");   
     glutReshapeFunc(reshape);
     glutKeyboardFunc(Event::keyboard);
     glutDisplayFunc(display);
-    glutTimerFunc(17, timer, 0);
-
+    glutTimerFunc(17, timer, 0);    
 }
 
 void init()
 {
-    initGlut();
+    initGlut();    
     glClearColor(0.3, 0.3, 0.3, 0.3);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 }
 
 // main function - entry of the program
@@ -108,7 +107,7 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
 
-    upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
+    upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/boat.obj"), Vec3D(0,1,0));        
 
     glutMainLoop();
 

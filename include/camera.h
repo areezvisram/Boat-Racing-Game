@@ -1,5 +1,5 @@
 #ifndef CAMERA_H
-#define CAEMRA_H
+#define CAMERA_H
 
 #include <mathLib3D.h>
 
