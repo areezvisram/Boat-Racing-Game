@@ -84,3 +84,7 @@ Vec3D Vec3D::cross(Vec3D v1, Vec3D v2)
         v1.z * v2.x - v1.x * v2.z,
         v1.x * v2.y - v1.y * v2.x);
 }
+float Vec3D::toRadians(float degrees)
+{
+    return (3.14159265 / 180.0) * degrees;
+}

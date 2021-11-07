@@ -10,13 +10,15 @@ class Boat : public Object
 {
     public:
         Boat();
-        Boat(Point3D position, Mesh mesh, Vec3D rotation, Vec3D direction, Camera camera);
-        Vec3D rot;
+        Boat(Point3D position, Mesh mesh, Vec3D rotation, Camera camera);
         Vec3D dir;
+        float speed;
+        Vec3D rot;
         Camera camera;
 
-        void update();
-        void forward(float distance);
+        void update(bool forward, bool back, bool left, bool right);
+        Vec3D sumForces();
+        void moveForward(float distance);
 };
 
 #endif
