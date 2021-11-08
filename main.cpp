@@ -74,10 +74,8 @@ void drawAxis(){
 void useCamera(Boat b)
 {
     Point3D pos = b.pos;
-    Point3D camPos = b.camera.pos;
-    camPos.x += b.pos.x;
-    camPos.y += b.pos.y;
-    camPos.z += b.pos.z;
+    Vec3D backVec = b.forwardVector().normalize().multiply(b.camera.pos.x);
+    Point3D camPos = backVec.add(Vec3D::createVector(Point3D(), Point3D(0,b.camera.pos.y,0))).movePoint(pos);
 
     gluLookAt(camPos.x, camPos.y, camPos.z, pos.x, pos.y, pos.z, 0,1,0);
 }
@@ -90,7 +88,6 @@ void display(void)
     glLoadIdentity();
     useCamera(boat);
     // gluLookAt(-5, 20, 5, 0, 0, 0, 0, 1, 0);    
-    // gluLookAt(-5, 20, 5, 0, 0, 0, 0, 1, 0);  
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
