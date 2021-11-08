@@ -34,6 +34,7 @@ public:
     static Vec3D createVector(Point3D p1, Point3D p2);
     static float dot(Vec3D v1, Vec3D v2);
     static Vec3D cross(Vec3D v1, Vec3D v2);
+    static float toRadians(float degrees);
 };
 
 #endif

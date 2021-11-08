@@ -22,14 +22,20 @@
 #include <object/upgrade.h>
 #include <object/boat.h>
 
+using std::cout;
+using std::endl;
+
 // Global variables
-float GLOBAL_WIDTH = 800;
-float GLOBAL_HEIGHT = 800;
+float GLOBAL_WIDTH = 500;
+float GLOBAL_HEIGHT = 500;
 
 Camera camera;
 Mesh mesh;
 Upgrade upgrade;
 Boat boat;
+
+bool keystates[256] = {false};
+bool sKeystates[4] = {false};
 
 float lightPos[4] = {0, 10, 0, 1};
 float lightAmb[4] = {0.2, 0.2, 0.2, 1};
@@ -62,6 +68,18 @@ void drawAxis(){
     glVertex3f(0.0, 0.0, 5.0);
     glEnd();
     glPopMatrix();
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+}
+
+void useCamera(Boat b)
+{
+    Point3D pos = b.pos;
+    Point3D camPos = b.camera.pos;
+    camPos.x += b.pos.x;
+    camPos.y += b.pos.y;
+    camPos.z += b.pos.z;
+
+    gluLookAt(camPos.x, camPos.y, camPos.z, pos.x, pos.y, pos.z, 0,1,0);
 }
 
 // Display function
@@ -70,21 +88,22 @@ void display(void)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    gluLookAt(0, 10, 10, 0, 0, 0, 0, 1, 0);    
+    useCamera(boat);
+    // gluLookAt(-5, 20, 5, 0, 0, 0, 0, 1, 0);    
+    // gluLookAt(-5, 20, 5, 0, 0, 0, 0, 1, 0);  
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiff);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpec);
 
-    // drawAxis();
+    drawAxis();
 
     glPushMatrix();
     glTranslatef(boat.pos.x, boat.pos.y, boat.pos.z);
-    glRotated(boat.rot.x, 1,0,0);
-    glRotated(boat.rot.y, 0,1,0);
-    glRotated(boat.rot.z, 0,0,1);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+    glRotatef(boat.rot.x, 1,0,0);
+    glRotatef(boat.rot.y, 0,1,0);
+    glRotatef(boat.rot.z, 0,0,1);
     glColor3f(0.7, 0.1, 0);
     boat.draw();
     drawAxis();
@@ -109,35 +128,59 @@ void reshape(int w, int h)
 
 void timer(int value)
 {
-    boat.update();
+    boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);
     glutPostRedisplay();    
     glutTimerFunc(17, timer, 0);
 }
 
-void keyboard(unsigned char key, int x, int y)
+void keyDown(unsigned char key, int x, int y)
 {
+    keystates[tolower(key)] = true;
+}
+
+void keyUp(unsigned char key, int x, int y)
+{
+    keystates[tolower(key)] = false;
     switch (key)
     {
-    case 'q':
-        exit(0);
-        break;
+        case 'q':
+            exit(0);
+            break;
     }
 }
 
-void special(int key, int x, int y)
+void specialDown(int key, int x, int y)
 {
     switch(key) {
-        case GLUT_KEY_RIGHT:
-            boat.pos.z -= 0.5;
-            break;
         case GLUT_KEY_LEFT:
-            boat.pos.z += 0.5;
+            sKeystates[0] = true;
             break;
         case GLUT_KEY_UP:
-            boat.pos.x -= 0.5;
+            sKeystates[1] = true;
+            break;
+        case GLUT_KEY_RIGHT:
+            sKeystates[2] = true;
             break;
         case GLUT_KEY_DOWN:
-            boat.pos.x += 0.5;
+            sKeystates[3] = true;
+            break;            
+    }
+}
+
+void specialUp(int key, int x, int y)
+{
+    switch(key) {
+        case GLUT_KEY_LEFT:
+            sKeystates[0] = false;
+            break;
+        case GLUT_KEY_UP:
+            sKeystates[1] = false;
+            break;
+        case GLUT_KEY_RIGHT:
+            sKeystates[2] = false;
+            break;
+        case GLUT_KEY_DOWN:
+            sKeystates[3] = false;
             break;            
     }
 }
@@ -149,11 +192,13 @@ void initGlut()
     glutInitWindowPosition(50, 50);    
     glutCreateWindow("Final Project");   
     glutReshapeFunc(reshape);
-    glutSpecialFunc(special);
-    glutKeyboardFunc(keyboard);
+    glutSpecialFunc(specialDown);
+    glutSpecialUpFunc(specialUp);
+    glutKeyboardFunc(keyDown);
+    glutKeyboardUpFunc(keyUp);
     glutDisplayFunc(display);
     glutTimerFunc(17, timer, 0);
-    glutFullScreen();
+    // glutFullScreen();
 }
 
 void init()
@@ -175,7 +220,7 @@ int main(int argc, char **argv)
     init();
 
     //upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
-    boat = Boat(Point3D(0, 0, 0), Mesh::createFromOBJ("obj/boat.obj"), Vec3D(0,1,0), Vec3D(0, 0, 0), 0.005, Camera());
+    boat = Boat(Point3D(0, 0, 0), Mesh::createFromOBJ("obj/boat2.obj"), Vec3D(0, 0, 0), 100, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
     //mesh = Mesh::createFromOBJ("obj/boat.obj");
 
     glutMainLoop();
