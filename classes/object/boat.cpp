@@ -46,6 +46,8 @@ void Boat::update(bool forward, bool back, bool left, bool right)
         rot.y -= rotInc;
     }
 
+    rot = rot.add(angularVel);
+
     Vec3D force = sumForces();
     acc = force.multiply(1.0 / mass);
     Vec3D vel = dir.multiply(speed);

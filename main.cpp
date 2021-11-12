@@ -186,7 +186,7 @@ void initGlut()
 {
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);    
     glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutInitWindowPosition(50, 50);    
+    glutInitWindowPosition(2000, 50);    
     glutCreateWindow("Final Project");   
     glutReshapeFunc(reshape);
     glutSpecialFunc(specialDown);
@@ -195,7 +195,7 @@ void initGlut()
     glutKeyboardUpFunc(keyUp);
     glutDisplayFunc(display);
     glutTimerFunc(17, timer, 0);
-    // glutFullScreen();
+    glutFullScreen();
 }
 
 void init()
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
 
     //upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
     boat = Boat(Point3D(0, 0, 0), Mesh::createFromOBJ("obj/boat2.obj"), Vec3D(0, 0, 0), 100, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
-    //mesh = Mesh::createFromOBJ("obj/boat.obj");
+    boat.angularVel = Vec3D(0,0.1,0);
 
     glutMainLoop();
 

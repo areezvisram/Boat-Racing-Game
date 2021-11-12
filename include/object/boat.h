@@ -26,6 +26,8 @@ class Boat : public Object
         float speed;
         Vec3D acc;
         Vec3D rot;
+        Vec3D angularVel;
+        Vec3D angularAcc;
         Camera camera;
 
         void update(bool forward, bool back, bool left, bool right);
