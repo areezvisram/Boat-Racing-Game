@@ -131,7 +131,6 @@ void display(void)
     gluLookAt(cameraX, cameraY, cameraZ, cameraDirX, cameraDirY, cameraDirZ, 0, 1, 0);
     
     glPushMatrix();
-    glPushMatrix();
 
     glPushMatrix();
         drawFloor();
