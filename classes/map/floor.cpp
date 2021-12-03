@@ -12,11 +12,7 @@
 
 #include <map/floor.h>
 #include <mathLib3D.h>
-
-float mat_ambient [4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
-float mat_diffuse [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
-float mat_specular [4] ={ 0.992157f, 0.941176f, 0.807843f, 1.0f };
-float shine = 27.8974f;
+#include <material.h>
 
 Floor::Floor() {
     vertices = {
@@ -31,14 +27,23 @@ Floor::Floor(std::vector<Vec3D> vertices) {
     this->vertices = vertices;
 }
 
+Floor::Floor(std::vector<Vec3D> vertices, Material material) 
+{
+    this->vertices = vertices;
+    this->material = material;
+}
+
 void Floor::draw() {
+    glPushMatrix();
     glBegin(GL_POLYGON);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, material.shiny); 
+    glNormal3f(0,1,0);
     for(Vec3D vertex : vertices) {
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_specular);
-        glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, shine); 
         glVertex3f(vertex.x, vertex.y, vertex.z);
     }
     glEnd();
+    glPopMatrix();
 }

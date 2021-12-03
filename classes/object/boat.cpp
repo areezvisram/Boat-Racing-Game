@@ -21,7 +21,7 @@ const float Boat::THRUST_FORCE_MAG = 0.7;
 const float Boat::BREAK_FORCE_MAG = 0.5;
 const float Boat::FRICTION_FORCE_MAG = 0.1;
 // const float Boat::MIN_SPEED = 0.0001;
-const float Boat::MAX_SPEED = 0.1;
+const float Boat::MAX_SPEED = 0.3;
 
 void Boat::update(bool forward, bool back, bool left, bool right)
 {   
