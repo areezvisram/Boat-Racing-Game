@@ -40,8 +40,8 @@ float wall_diffuse[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
 float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
 float wall_shine = 10.0f;
 
-FileReader floorReader = FileReader("floor.txt");
-FileReader wallReader = FileReader("walls.txt");
+FileReader floorReader = FileReader("map/floor.txt");
+FileReader wallReader = FileReader("map/walls.txt");
 Material floorMaterial = Material(mat_ambient, mat_diffuse, mat_specular, shine);
 Material wallMaterial = Material(wall_ambient, wall_diffuse, wall_specular, wall_shine);
 
@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     init();
-    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), Vec3D(0, 180, 0), 100, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
     glutMainLoop();
     return (0);
 }
