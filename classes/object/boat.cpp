@@ -9,34 +9,27 @@ Boat::Boat() : Object(Point3D(), Mesh())
     mass = 1;
 }
 
-Boat::Boat(Point3D pos, Mesh mesh, Vec3D rot, float mass, Camera camera) : Object(pos, mesh)
+Boat::Boat(Point3D pos, Mesh mesh, Vec3D rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
 {
-    this->rot = rot;
+    this->rot = rot;    
     this->mass = mass;
+    this->max_speed = max_speed;
+    this->thrust_force_mag = thrust_force_mag;
     this->camera = camera;
     this->dir = Vec3D(1,0,0);
 }
 
-const float Boat::THRUST_FORCE_MAG = 0.7;
+//const float Boat::THRUST_FORCE_MAG = 0.7;
 const float Boat::BREAK_FORCE_MAG = 0.5;
 const float Boat::FRICTION_FORCE_MAG = 0.1;
 // const float Boat::MIN_SPEED = 0.0001;
-const float Boat::MAX_SPEED = 0.1;
+//const float Boat::MAX_SPEED = 0.3;
 
 void Boat::update(bool forward, bool back, bool left, bool right)
-{   
-    // forwardMag = 0;
+{       
     thrusting = forward;
     breaking = back;
-    float rotInc = 0.8;
-    // if (forward)
-    // {
-    //     // moveForward(0.2);
-    // }
-    // if (back)
-    // {
-    //     // moveForward(-0.2);
-    // }
+    float rotInc = 0.8;    
     if (left)
     {
         rot.y += rotInc;
@@ -53,13 +46,9 @@ void Boat::update(bool forward, bool back, bool left, bool right)
     Vec3D vel = dir.multiply(speed);
     vel = vel.add(acc);
     speed = vel.length();
-    // if (speed <= MIN_SPEED)
-    // {
-    //     speed = 0.0;
-    // }
-    if (speed >= MAX_SPEED)
+    if (speed >= max_speed)
     {
-        speed = MAX_SPEED;
+        speed = max_speed;
     }
     dir = vel.normalize();
     pos = vel.movePoint(pos);
@@ -82,7 +71,7 @@ Vec3D Boat::sumForces()
 
     if (thrusting)
     {
-        total = total.add(forwardVector().multiply(THRUST_FORCE_MAG));
+        total = total.add(forwardVector().multiply(thrust_force_mag));
     }
 
     if (breaking)
