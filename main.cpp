@@ -44,13 +44,12 @@ float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
 float wall_shine = 10.0f;
 
 FileReader floorReader = FileReader("map/floor.txt");
-//FileReader wallReader = FileReader("map/walls.txt");
+FileReader wallReader = FileReader("map/walls.txt");
 Material floorMaterial = Material(mat_ambient, mat_diffuse, mat_specular, shine);
 Material wallMaterial = Material(wall_ambient, wall_diffuse, wall_specular, wall_shine);
 
 std::vector<Floor> test_floors = floorReader.readFloorVertices(floorMaterial);
-std::vector<Wall> test_walls ;
-// = wallReader.readWallVertices(wallMaterial);
+std::vector<Wall> test_walls = wallReader.readWallVertices(wallMaterial);
 Map map = Map(test_walls, test_floors);
 
 bool keystates[256] = {false};
@@ -288,7 +287,7 @@ void reshape(int w, int h)
 void timer(int value)
 {
     boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);    
-    boat2.update(keystates['w'], keystates['a'], keystates['s'], keystates['d']);
+    boat2.update(keystates['w'], keystates['s'], keystates['a'], keystates['d']);
     glutSetWindow(windowId1);
     glutPostRedisplay();    
     // glutSetWindow(windowId2);
