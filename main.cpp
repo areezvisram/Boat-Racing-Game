@@ -26,10 +26,13 @@
 #include <map/map.h>
 #include <map/wall.h>
 
+GLint windowId1, windowId2;
+
 Camera camera;
 Mesh mesh;
 Upgrade upgrade;
 Boat boat;
+Boat boat2;
 float mat_ambient [4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
 float mat_diffuse [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
 float mat_specular [4] ={ 0.992157f, 0.941176f, 0.807843f, 1.0f };
@@ -41,12 +44,13 @@ float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
 float wall_shine = 10.0f;
 
 FileReader floorReader = FileReader("map/floor.txt");
-FileReader wallReader = FileReader("map/walls.txt");
+//FileReader wallReader = FileReader("map/walls.txt");
 Material floorMaterial = Material(mat_ambient, mat_diffuse, mat_specular, shine);
 Material wallMaterial = Material(wall_ambient, wall_diffuse, wall_specular, wall_shine);
 
 std::vector<Floor> test_floors = floorReader.readFloorVertices(floorMaterial);
-std::vector<Wall> test_walls = wallReader.readWallVertices(wallMaterial);
+std::vector<Wall> test_walls ;
+// = wallReader.readWallVertices(wallMaterial);
 Map map = Map(test_walls, test_floors);
 
 bool keystates[256] = {false};
@@ -155,14 +159,11 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    useCamera(boat);
-    //gluLookAt(cameraX, cameraY, cameraZ, cameraDirX, cameraDirY, cameraDirZ, 0, 1, 0);
+    //glViewport(0,0,GLOBAL_WIDTH/2, GLOBAL_HEIGHT);
+    //glLoadIdentity();
+    useCamera(boat);    
 
-    glPushMatrix();
-
-    // glPushMatrix();
-    //     drawFloor();
-    // glPopMatrix();
+    glPushMatrix();    
     glPushMatrix();
         glTranslatef(boat.pos.x, boat.pos.y, boat.pos.z);
         glRotatef(boat.rot.x, 1,0,0);
@@ -174,8 +175,92 @@ void display(void)
     glPopMatrix();
 
     glPushMatrix();
+        glTranslatef(boat2.pos.x, boat2.pos.y, boat2.pos.z);
+        glRotatef(boat2.rot.x, 1,0,0);
+        glRotatef(boat2.rot.y, 0,1,0);
+        glRotatef(boat2.rot.z, 0,0,1);
+        glColor3f(0.7, 0.1, 0);
+        boat2.draw();
+        drawAxis();
+    glPopMatrix();
+
+    glPushMatrix();
         map.render();
     glPopMatrix();
+
+   // glViewport(GLOBAL_WIDTH/2, 0, GLOBAL_WIDTH, GLOBAL_HEIGHT);
+   // glLoadIdentity();
+   // useCamera(boat2);
+
+    // glPushMatrix();
+    //     glTranslatef(boat2.pos.x, boat2.pos.y, boat2.pos.z);
+    //     glRotatef(boat2.rot.x, 1,0,0);
+    //     glRotatef(boat2.rot.y, 0,1,0);
+    //     glRotatef(boat2.rot.z, 0,0,1);
+    //     glColor3f(0.7, 0.1, 0);
+    //     boat2.draw();
+    //     drawAxis();
+    // glPopMatrix();
+
+    //     glPushMatrix();    
+    // glPushMatrix();
+    //     glTranslatef(boat.pos.x, boat.pos.y, boat.pos.z);
+    //     glRotatef(boat.rot.x, 1,0,0);
+    //     glRotatef(boat.rot.y, 0,1,0);
+    //     glRotatef(boat.rot.z, 0,0,1);
+    //     glColor3f(0.7, 0.1, 0);
+    //     boat.draw();
+    //     drawAxis();
+    // glPopMatrix();
+
+    glPushMatrix();
+        map.render();
+    glPopMatrix();
+
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
+    glColor3f(1, 1, 1);
+
+    glPopMatrix();
+
+    glutSwapBuffers();
+}
+
+// Display function
+void secondWindowDisplay(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    //glViewport(0,0,GLOBAL_WIDTH/2, GLOBAL_HEIGHT);
+    //glLoadIdentity();
+    useCamera(boat2);    
+
+    glPushMatrix();    
+    glPushMatrix();
+        glTranslatef(boat.pos.x, boat.pos.y, boat.pos.z);
+        glRotatef(boat.rot.x, 1,0,0);
+        glRotatef(boat.rot.y, 0,1,0);
+        glRotatef(boat.rot.z, 0,0,1);
+        glColor3f(0.7, 0.1, 0);
+        boat.draw();
+        drawAxis();
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(boat2.pos.x, boat2.pos.y, boat2.pos.z);
+        glRotatef(boat2.rot.x, 1,0,0);
+        glRotatef(boat2.rot.y, 0,1,0);
+        glRotatef(boat2.rot.z, 0,0,1);
+        glColor3f(0.7, 0.1, 0);
+        boat2.draw();
+        drawAxis();
+    glPopMatrix();
+
+    // glPushMatrix();
+    //     map.render();
+    // glPopMatrix();
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
@@ -202,9 +287,30 @@ void reshape(int w, int h)
 
 void timer(int value)
 {
-    boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);
+    boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);    
+    boat2.update(keystates['w'], keystates['a'], keystates['s'], keystates['d']);
+    glutSetWindow(windowId1);
     glutPostRedisplay();    
+    // glutSetWindow(windowId2);
+    // //glutDisplayFunc(secondWindowDisplay);
+    // glutPostRedisplay();
+    // glutSetWindow(windowId1);
+    // //glutDisplayFunc(display);
     glutTimerFunc(17, timer, 0);
+}
+
+void secondTimer(int value)
+{
+    boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);    
+    boat2.update(keystates['w'], keystates['a'], keystates['s'], keystates['d']);
+    glutSetWindow(windowId2);
+    glutPostRedisplay();    
+    // glutSetWindow(windowId2);
+    // //glutDisplayFunc(secondWindowDisplay);
+    // glutPostRedisplay();
+    // glutSetWindow(windowId1);
+    // //glutDisplayFunc(display);
+    glutTimerFunc(17, secondTimer, 0);
 }
 
 void keyDown(unsigned char key, int x, int y)
@@ -219,7 +325,7 @@ void keyUp(unsigned char key, int x, int y)
     {
         case 'q':
             exit(0);
-            break;
+            break;        
     }
 }
 
@@ -262,10 +368,18 @@ void specialUp(int key, int x, int y)
 // Initialize glut 
 void initGlut()
 {
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);    
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH); 
+
     glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutInitWindowPosition(2000, 50);    
-    glutCreateWindow("Final Project");   
+    glutInitWindowPosition(2000 + GLOBAL_WIDTH, 50);    
+    windowId2 = glutCreateWindow("Final Project Window 2");   
+    glutReshapeFunc(reshape);
+    glutDisplayFunc(secondWindowDisplay);
+    glutTimerFunc(17, secondTimer, 0);
+
+    glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
+    glutInitWindowPosition(1200, 50);    
+    windowId1 = glutCreateWindow("Final Project");   
     glutReshapeFunc(reshape);
     glutSpecialFunc(specialDown);
     glutSpecialUpFunc(specialUp);
@@ -282,7 +396,7 @@ void init()
     glClearColor(0.6, 0.6, 0.6, 0);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT0);    
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
@@ -294,7 +408,8 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     init();
-    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/fishingTex.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/pirate.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat2 = Boat(Point3D(200, 15,-10), Mesh::createFromOBJ("obj/fishing.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
     glutMainLoop();
     return (0);
 }
