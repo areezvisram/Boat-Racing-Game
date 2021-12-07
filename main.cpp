@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     init();
-    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/fishingTex.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
     glutMainLoop();
     return (0);
 }
