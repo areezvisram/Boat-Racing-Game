@@ -4,6 +4,7 @@
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 #else
+#include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/freeglut.h>
@@ -104,7 +105,7 @@ void drawAxis()
     glBegin(GL_LINES);
 
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, red); // red x
-    glColor3f (1.0, 0.0, 0.0);
+    glColor3f (1.0, 1.0, 1.0);
     glVertex3f(0.0, 0.0, 0.0);
     glVertex3f(5.0, 0.0, 0.0);
 
@@ -257,9 +258,9 @@ void secondWindowDisplay(void)
         drawAxis();
     glPopMatrix();
 
-    // glPushMatrix();
-    //     map.render();
-    // glPopMatrix();
+    glPushMatrix();
+        map.render();
+    glPopMatrix();
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
@@ -301,7 +302,7 @@ void timer(int value)
 void secondTimer(int value)
 {
     boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);    
-    boat2.update(keystates['w'], keystates['a'], keystates['s'], keystates['d']);
+    boat2.update(keystates['w'], keystates['s'], keystates['a'], keystates['d']);
     glutSetWindow(windowId2);
     glutPostRedisplay();    
     // glutSetWindow(windowId2);
@@ -392,6 +393,16 @@ void initGlut()
 void init()
 {
     initGlut();
+    glutSetWindow(windowId1);
+    glClearColor(0.6, 0.6, 0.6, 0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);    
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+
+    glutSetWindow(windowId2);
     glClearColor(0.6, 0.6, 0.6, 0);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
