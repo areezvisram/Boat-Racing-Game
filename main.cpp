@@ -26,7 +26,7 @@
 #include <fileReader.h>
 #include <map/map.h>
 #include <map/wall.h>
-#include <screens/screen.h>
+#include <screens/startScreen.h>
 
 GLint windowId1, windowId2, startScreenId;
 
@@ -36,48 +36,7 @@ Upgrade upgrade;
 Boat boat;
 Boat boat2;
 
-// // Function that renders text onto the screen as a bitmap at the given (x,y) position in the given font
-// void renderText(float x, float y, void *font, const char *string) 
-// {  
-//     const char *character;
-
-//     glMatrixMode(GL_PROJECTION);
-//     glPushMatrix();
-
-//     glLoadIdentity();
-//     glMatrixMode(GL_MODELVIEW);
-//     glPushMatrix();
-//     glLoadIdentity();
-
-//     glDisable(GL_DEPTH_TEST);
-//     glRasterPos2f(x,y);
-//     glColor3f(1.0f, 1.0f, 1.0f);
-//     for (character=string; *character != '\0'; character++) 
-//     {
-//         glutBitmapCharacter(font, *character);
-//     }
-
-//     glEnable(GL_DEPTH_TEST);
-//     glMatrixMode(GL_PROJECTION);
-//     glPopMatrix();
-//     glMatrixMode(GL_MODELVIEW);
-//     glPopMatrix();
-// }
-
-// // Display function for the save screen
-// void saveDisplay()
-// {
-//     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
-//     glMatrixMode(GL_MODELVIEW);
-//     glPushMatrix();       
-//     glColor3f(1,1,1);
-//     renderText(-0.70, 0.70, GLUT_BITMAP_TIMES_ROMAN_24, "Enter the name of the file");
-//     renderText(-0.70, 0.60, GLUT_BITMAP_TIMES_ROMAN_24, "you would like to save to:");
-//     glPopMatrix();
-
-//     glutSwapBuffers();
-// }
-// Screen testScreen = Screen(800, 800, 0, 50, "Test Screen", saveDisplay);
+StartScreen testScreen = StartScreen(800, 800, 0, 50, "Test Screen");
 
 float mat_ambient [4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
 float mat_diffuse [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
@@ -437,7 +396,7 @@ void initGlut()
     glutTimerFunc(17, timer, 0);
     glutHideWindow();
 
-    startScreenId = testScreen.createWindow();
+    testScreen.createWindow();
 }
 
 // Initialize program
