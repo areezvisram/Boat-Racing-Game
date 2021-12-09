@@ -288,7 +288,7 @@ void reshape(int w, int h)
 void timer(int value)
 {
     boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);    
-    boat2.update(keystates['w'], keystates['s'], keystates['a'], keystates['d']);
+    boat2.update(keystates[(unsigned char)'w'], keystates[(unsigned char)'s'], keystates[(unsigned char)'a'], keystates[(unsigned char)'d']);
     glutSetWindow(windowId1);
     glutPostRedisplay();    
     // glutSetWindow(windowId2);
@@ -296,20 +296,22 @@ void timer(int value)
     // glutPostRedisplay();
     // glutSetWindow(windowId1);
     // //glutDisplayFunc(display);
+    std::cout << "BOAT:" << boat.speed << " ";
     glutTimerFunc(17, timer, 0);
 }
 
 void secondTimer(int value)
 {
     boat.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);    
-    boat2.update(keystates['w'], keystates['s'], keystates['a'], keystates['d']);
+    boat2.update(keystates[(unsigned char)'w'], keystates[(unsigned char)'s'], keystates[(unsigned char)'a'], keystates[(unsigned char)'d']);
     glutSetWindow(windowId2);
     glutPostRedisplay();    
     // glutSetWindow(windowId2);
     // //glutDisplayFunc(secondWindowDisplay);
     // glutPostRedisplay();
     // glutSetWindow(windowId1);
-    // //glutDisplayFunc(display);
+    // //glutDisplayFunc(display);    
+    std::cout << "BOAT 2: " << boat2.speed << "\n";
     glutTimerFunc(17, secondTimer, 0);
 }
 
@@ -371,14 +373,14 @@ void initGlut()
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH); 
 
     glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutInitWindowPosition(2000 + GLOBAL_WIDTH, 50);    
+    glutInitWindowPosition(0, 50);    
     windowId2 = glutCreateWindow("Final Project Window 2");   
     glutReshapeFunc(reshape);
     glutDisplayFunc(secondWindowDisplay);
     glutTimerFunc(17, secondTimer, 0);
 
     glutInitWindowSize(GLOBAL_WIDTH, GLOBAL_HEIGHT);
-    glutInitWindowPosition(1200, 50);    
+    glutInitWindowPosition(800, 50);    
     windowId1 = glutCreateWindow("Final Project");   
     glutReshapeFunc(reshape);
     glutSpecialFunc(specialDown);
@@ -418,8 +420,8 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     init();
-    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/pirate.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
-    boat2 = Boat(Point3D(200, 15,-10), Mesh::createFromOBJ("obj/fishing.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat = Boat(Point3D(200, 10, 0), Boat::PIRATE, Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    boat2 = Boat(Point3D(200, 10, 0), Boat::SMALLPIRATE, Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 100, 0), Point3D()), 45));    
     glutMainLoop();
     return (0);
 }
