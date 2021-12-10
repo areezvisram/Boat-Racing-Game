@@ -11,10 +11,40 @@
 #endif
 
 #include <screens/boatSelectionScreen.h>
+#include <screens/onePlayerRace.h>
 #include <helperFunctions.h>
+#include <object/boat.h>
+#include <iostream>
+#include <PPM.h>
+
+OnePlayerRaceScreen onePlayerRaceScreen;
+
+GLint boatWindowId;
 
 const char* text;
+//Boat boatSelection = Boat(Point3D(0, -0.3, 0), Boat::PIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+std::vector<Boat> boats = 
+{
+    Boat(Point3D(0, -0.1, 0), Boat::SPEED, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
+    Boat(Point3D(0, -0.1, 0), Boat::FISHING, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
+    Boat(Point3D(0, -0.3, 0), Boat::PIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),    
+    Boat(Point3D(0, -0.2, 0), Boat::SMALLPIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),    
+};
 
+int globalMaterialIndex = 1;
+int boatIndex = 0;
+
+int leftWidth, leftHeight, leftMax;
+GLubyte * leftImage;
+
+int rightWidth, rightHeight, rightMax;
+GLubyte * rightImage;
+
+int matsWidth, matsHeight, matsMax;
+GLubyte * matsImage;
+
+int doneWidth, doneHeight, doneMax;
+GLubyte * doneImage;
 
 BoatSelectionScreen::BoatSelectionScreen()
 {
@@ -47,27 +77,240 @@ void BoatSelectionScreen::determineNumPlayers()
     }
 }
 
-// Display function for the save screen
-void onePlayerDisplay()
+void goToNextScreen()
 {
+    glutDestroyWindow(boatWindowId);
+    onePlayerRaceScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndex, globalMaterialIndex);    
+    onePlayerRaceScreen.determineMaterial();
+    onePlayerRaceScreen.createWindow();
+}
+
+void setMaterialZero()
+{
+    globalMaterialIndex = 0;
+    glutPostRedisplay();    
+}
+
+void setMaterialOne()
+{
+    globalMaterialIndex = 1;
+    glutPostRedisplay();
+}
+
+void setMaterialTwo()
+{
+    globalMaterialIndex = 2;
+    glutPostRedisplay();
+}
+
+void setMaterialThree()
+{
+    globalMaterialIndex = 3;
+    glutPostRedisplay();
+}
+
+void setMaterialFour()
+{
+    globalMaterialIndex = 4;
+    glutPostRedisplay();
+}
+
+void decreaseBoatIndex()
+{
+    if(boatIndex == 0)
+    {
+        boatIndex = 3;
+    } else {
+        boatIndex -= 1;
+    }
+    glutPostRedisplay();
+}
+
+void increaseBoatIndex()
+{
+    if(boatIndex == 3)
+    {
+        boatIndex = 0;
+    } else {
+        boatIndex += 1;
+    }
+    glutPostRedisplay();
+}
+
+Handler material0Clicked = {
+    160,
+    240,
+    120,
+    40,
+    setMaterialOne
+};
+
+Handler material1Clicked = {
+    260,
+    340,
+    120,
+    40,
+    setMaterialZero
+};
+
+Handler material2Clicked = {
+    360,
+    440,
+    120,
+    40,
+    setMaterialTwo
+};
+
+Handler material3Clicked = {
+    460,
+    540,
+    120,
+    40,
+    setMaterialThree
+};
+
+Handler material4Clicked = {
+    560,
+    640,
+    120,
+    40,
+    setMaterialFour
+};
+
+Handler leftClicked = {
+    220,
+    320,
+    215,
+    160,
+    decreaseBoatIndex
+};
+
+Handler rightClicked = {
+    460,
+    560,
+    215,
+    160,
+    increaseBoatIndex
+};
+
+Handler doneClicked =
+{
+    670,
+    750,
+    80,
+    40,
+    goToNextScreen
+};
+
+InteractionHandler boatSelectionMouseHandler;
+
+void boatSelectionMouse(int button, int state, int x, int y)
+{
+    y = 800 - y;
+    if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+        boatSelectionMouseHandler.leftClickDown(x,y);
+    }
+}
+
+// Display function for the save screen
+void boatSelectionDisplay()
+{    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();       
     glColor3f(1,1,1);
     glScalef(5,5,5);
-    renderText(-0.60, 0.70, GLUT_STROKE_ROMAN, text, 0.0008);    
+    glDisable(GL_LIGHTING);
+    renderText(-0.40, 0.80, GLUT_STROKE_ROMAN, "Boat Selection", 0.001);    
+    glPopMatrix();
+
+
+    Boat boatSelection = boats.at(boatIndex);
+    // std::cout << boatSelection.rot.x << "\n";       
+
+    glPushMatrix();
+    glEnable(GL_LIGHTING);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndex][0]);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndex][1]);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndex][2]);
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
+    glTranslatef(boatSelection.pos.x, boatSelection.pos.y, boatSelection.pos.z);
+    glRotatef(boatSelection.rot.x, 1,0,0);
+    glRotatef(boatSelection.rot.y, 0,1,0);
+    glRotatef(boatSelection.rot.z, 0,0,1);
+    boatSelection.draw();
+    glPopMatrix();
+
+    glPushMatrix();
+    leftImage = LoadPPM("images/left.ppm", &leftWidth, &leftHeight, &leftMax);
+    glRasterPos2f(-0.20, -0.60);    
+    glPixelZoom(-1, 1);
+    glDrawPixels(leftWidth, leftHeight, GL_RGB, GL_UNSIGNED_BYTE, leftImage);
+    glPopMatrix();
+
+    glPushMatrix();
+    rightImage = LoadPPM("images/right.ppm", &rightWidth, &rightHeight, &rightMax);
+    glRasterPos2f(0.40, -0.60);    
+    glPixelZoom(-1, 1);
+    glDrawPixels(rightWidth, rightHeight, GL_RGB, GL_UNSIGNED_BYTE, rightImage);
+    glPopMatrix();
+
+    glPushMatrix();
+    matsImage = LoadPPM("images/materials.ppm", &matsWidth, &matsHeight, &matsMax);
+    glRasterPos2f(0.60, -0.90);
+    glPixelZoom(-1, 1);
+    glDrawPixels(matsWidth, matsHeight, GL_RGB, GL_UNSIGNED_BYTE, matsImage);
+    glPopMatrix();
+
+    glPushMatrix();
+    doneImage = LoadPPM("images/done.ppm", &doneWidth, &doneHeight, &doneMax);
+    glRasterPos2f(0.90, -0.95);
+    glPixelZoom(-1, 1);
+    glDrawPixels(doneWidth, doneHeight, GL_RGB, GL_UNSIGNED_BYTE, doneImage);
     glPopMatrix();
 
     glutSwapBuffers();
 }
 
+void boatSelectionTimer(int value)
+{    
+    // boatSelection.rot.x -= 5;
+    // boatSelection.rot.x = (int)boatSelection.rot.x % 360;    
+    // std::cout << boatSelection.rot.x << "\n";       
+    glutPostRedisplay();    
+    glutTimerFunc(17, boatSelectionTimer, 0);
+
+}
+
 
 int BoatSelectionScreen::createWindow()
 {
+    boatSelectionMouseHandler.addHandler(&material0Clicked);
+    boatSelectionMouseHandler.addHandler(&material1Clicked);
+    boatSelectionMouseHandler.addHandler(&material2Clicked);
+    boatSelectionMouseHandler.addHandler(&material3Clicked);
+    boatSelectionMouseHandler.addHandler(&material4Clicked);
+    boatSelectionMouseHandler.addHandler(&leftClicked);
+    boatSelectionMouseHandler.addHandler(&rightClicked);
+    boatSelectionMouseHandler.addHandler(&doneClicked);
+
     glutInitWindowSize(width, height);
-    glutInitWindowPosition(windowPosX, windowPosY);    
-    GLint windowId = glutCreateWindow(windowName);    
-    glutDisplayFunc(onePlayerDisplay);  
-    return windowId;
+    glutInitWindowPosition(windowPosX, windowPosY);        
+    boatWindowId = glutCreateWindow(windowName);      
+    glutSetWindow(boatWindowId);      
+    glutDisplayFunc(boatSelectionDisplay);  
+    glutTimerFunc(17, boatSelectionTimer, 0);
+    glutMouseFunc(boatSelectionMouse);
+    // return windowId;
+
+    glutSetWindow(boatWindowId);
+    glClearColor(0, 0, 0, 0);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);    
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
 
 }

@@ -17,6 +17,8 @@
 #include <iostream>
 #include <vector>
 
+GLint windowId;
+
 int onePlayerWidth, onePlayerHeight, onePlayerMax;
 GLubyte * onePlayerImage;
 
@@ -76,33 +78,19 @@ void startScreenDisplay()
     glutSwapBuffers();
 }
 
-struct Handler {
-    unsigned int mLeft, mRight, mTop, mBottom;
-    void (*mHandlerFunc)();
-
-    bool isInBounds(unsigned int x, unsigned int y) {
-        return (x > mLeft && x < mRight && y < mTop && y > mBottom);
-    }
-
-    void handleClickAt(unsigned int x, unsigned int y) {
-        if (isInBounds(x, y)) {
-            mHandlerFunc();
-        }
-    }
-};
-
-void printPlayerOne()
+void oneBoat()
 {
-    glutHideWindow();
-    boatSelectionScreen = BoatSelectionScreen(800, 800, 4000, 50, "One Player Screen", 1);
+    //glutHideWindow();
+    glutDestroyWindow(windowId);
+    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 1);
     boatSelectionScreen.determineNumPlayers();
     boatSelectionScreen.createWindow();
 }    
 
-void printPlayerTwo()
+void twoBoats()
 {
-    glutHideWindow();
-    boatSelectionScreen = BoatSelectionScreen(800, 800, 4000, 50, "One Player Screen", 2);
+    glutDestroyWindow(windowId);
+    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 2);
     boatSelectionScreen.determineNumPlayers();
     boatSelectionScreen.createWindow();
 }
@@ -111,32 +99,17 @@ void printPlayerTwo()
 Handler onePlayerClicked = {
     60,
     360,
-    275,
-    225,
-    printPlayerOne
+    250,
+    200,
+    oneBoat
 };
 
 Handler twoPlayerClicked = {
     420,
     720,
-    275,
-    225,
-    printPlayerTwo
-};
-
-struct InteractionHandler {
-    std::vector<Handler *> mHandlers;
-
-    void leftClickDown(int x, int y) {
-        // std::cout << "Left click at " << x << ", " << y << std::endl;
-        for (Handler *handler : mHandlers) {            
-            handler->handleClickAt(x,y);
-        }
-    }
-
-    void addHandler(Handler *handler) {
-        mHandlers.push_back(handler);
-    }
+    250,
+    200,
+    twoBoats
 };
 
 InteractionHandler mouseHandler;
@@ -156,7 +129,7 @@ int StartScreen::createWindow()
     mouseHandler.addHandler(&twoPlayerClicked);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);    
-    GLint windowId = glutCreateWindow(windowName);    
+    windowId = glutCreateWindow(windowName);    
     glutDisplayFunc(startScreenDisplay);    
     glutMouseFunc(startScreenMouse);
     return windowId;

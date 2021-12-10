@@ -9,7 +9,9 @@
 #include <GL/glu.h>
 #include <GL/freeglut.h>
 #endif
+
 #include <helperFunctions.h>
+#include <vector>
 
 // Function that renders text onto the screen as a bitmap at the given (x,y) position in the given font
 void renderText(float x, float y, void *font, const char *string, float scaleFactor) 
