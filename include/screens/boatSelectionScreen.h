@@ -17,12 +17,12 @@ class BoatSelectionScreen
 {
     public:
         BoatSelectionScreen();
-        BoatSelectionScreen(int width, int height, int windowPosX, int windowPosY, const char* windowName, int numPlayers);
+        BoatSelectionScreen(int width, int height, int windowPosX, int windowPosY, const char* windowName, int numPlayers, int currentPlayer);
 
-        int width, height, windowPosX, windowPosY, numPlayers;
+        int width, height, windowPosX, windowPosY, numPlayers, currentPlayer;
         const char* windowName;        
 
-        int createWindow();
+        int createWindow(bool addHandlers);
 
         void determineNumPlayers();
 };

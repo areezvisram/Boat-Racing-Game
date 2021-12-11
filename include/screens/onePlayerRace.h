@@ -10,8 +10,6 @@
 #include <GL/freeglut.h>
 #endif
 
-#include <object/boat.h>
-
 #ifndef ONE_PLAYER_RACE_H
 #define ONE_PLAYER_RACE_H
 

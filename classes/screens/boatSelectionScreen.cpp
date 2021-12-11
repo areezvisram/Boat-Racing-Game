@@ -12,16 +12,19 @@
 
 #include <screens/boatSelectionScreen.h>
 #include <screens/onePlayerRace.h>
+#include <screens/twoPlayerRace.h>
 #include <helperFunctions.h>
 #include <object/boat.h>
 #include <iostream>
 #include <PPM.h>
 
 OnePlayerRaceScreen onePlayerRaceScreen;
+TwoPlayerRaceScreen twoPlayerRaceScreen;
+BoatSelectionScreen playerTwoSelectionScreen;
 
 GLint boatWindowId;
 
-const char* text;
+int numberOfPlayers, currentPlayerNum;
 //Boat boatSelection = Boat(Point3D(0, -0.3, 0), Boat::PIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
 std::vector<Boat> boats = 
 {
@@ -46,6 +49,8 @@ GLubyte * matsImage;
 int doneWidth, doneHeight, doneMax;
 GLubyte * doneImage;
 
+std::vector<int> twoPlayerInfo;
+
 BoatSelectionScreen::BoatSelectionScreen()
 {
     width = 800;
@@ -55,7 +60,7 @@ BoatSelectionScreen::BoatSelectionScreen()
     windowName = "Sample Window";
 }
 
-BoatSelectionScreen::BoatSelectionScreen(int width, int height, int windowPosX, int windowPosY, const char* windowName, int numPlayers)
+BoatSelectionScreen::BoatSelectionScreen(int width, int height, int windowPosX, int windowPosY, const char* windowName, int numPlayers, int currentPlayer)
 {
     this->width = width;
     this->height = height;
@@ -63,26 +68,48 @@ BoatSelectionScreen::BoatSelectionScreen(int width, int height, int windowPosX, 
     this->windowPosY = windowPosY;
     this->windowName = windowName;
     this->numPlayers = numPlayers;
+    this->currentPlayer = currentPlayer;
 }
 
 void BoatSelectionScreen::determineNumPlayers()
 {
-    if(numPlayers == 1)
-    {
-        text = "ONE PLAYER";
-    }
-    else if(numPlayers == 2)
-    {
-        text = "TWO PLAYER";
-    }
+    numberOfPlayers = numPlayers;
+    currentPlayerNum = currentPlayer;
 }
 
 void goToNextScreen()
 {
-    glutDestroyWindow(boatWindowId);
-    onePlayerRaceScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndex, globalMaterialIndex);    
-    onePlayerRaceScreen.determineMaterial();
-    onePlayerRaceScreen.createWindow();
+    std::cout << "Go to next screen called with currentPlayerNum = " << currentPlayerNum << "\n";
+    if(numberOfPlayers == 1)
+    {
+        glutDestroyWindow(boatWindowId);
+        onePlayerRaceScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndex, globalMaterialIndex);    
+        onePlayerRaceScreen.determineMaterial();
+        onePlayerRaceScreen.createWindow();
+    } 
+    else if(numberOfPlayers == 2)
+    {        
+        //std::cout << currentPlayerNum << "\n";
+        if(currentPlayerNum == 1)
+        {
+            glutDestroyWindow(boatWindowId);
+            twoPlayerInfo.push_back(boatIndex);
+            twoPlayerInfo.push_back(globalMaterialIndex);
+            playerTwoSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 2, 2);
+            globalMaterialIndex = 0;
+            boatIndex = 0;
+            playerTwoSelectionScreen.determineNumPlayers();
+            playerTwoSelectionScreen.createWindow(false);
+        } 
+        else if(currentPlayerNum == 2)
+        {
+            //std::cout << "CALLED" << "\n";
+            glutDestroyWindow(boatWindowId);
+            twoPlayerRaceScreen = TwoPlayerRaceScreen(800, 800, 2000, 50, "Player 2", twoPlayerInfo.at(0), twoPlayerInfo.at(1), boatIndex, globalMaterialIndex);
+            twoPlayerRaceScreen.determineMaterial();
+            twoPlayerRaceScreen.createWindow();
+        }
+    }
 }
 
 void setMaterialZero()
@@ -208,7 +235,7 @@ void boatSelectionMouse(int button, int state, int x, int y)
 {
     y = 800 - y;
     if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-    {
+    {        
         boatSelectionMouseHandler.leftClickDown(x,y);
     }
 }
@@ -223,6 +250,21 @@ void boatSelectionDisplay()
     glScalef(5,5,5);
     glDisable(GL_LIGHTING);
     renderText(-0.40, 0.80, GLUT_STROKE_ROMAN, "Boat Selection", 0.001);    
+    glPopMatrix();
+
+    glPushMatrix();       
+    glColor3f(1,1,1);
+    glScalef(5,5,5);
+    glDisable(GL_LIGHTING);
+    if(currentPlayerNum == 1)
+    {
+        renderText(-0.30, 0.65, GLUT_STROKE_ROMAN, "Player One", 0.001);    
+    } 
+    else if(currentPlayerNum == 2)
+    {
+        renderText(-0.30, 0.65, GLUT_STROKE_ROMAN, "Player Two", 0.001);    
+    }
+
     glPopMatrix();
 
 
@@ -283,22 +325,24 @@ void boatSelectionTimer(int value)
 
 }
 
-
-int BoatSelectionScreen::createWindow()
+int BoatSelectionScreen::createWindow(bool addHandlers)
 {
-    boatSelectionMouseHandler.addHandler(&material0Clicked);
-    boatSelectionMouseHandler.addHandler(&material1Clicked);
-    boatSelectionMouseHandler.addHandler(&material2Clicked);
-    boatSelectionMouseHandler.addHandler(&material3Clicked);
-    boatSelectionMouseHandler.addHandler(&material4Clicked);
-    boatSelectionMouseHandler.addHandler(&leftClicked);
-    boatSelectionMouseHandler.addHandler(&rightClicked);
-    boatSelectionMouseHandler.addHandler(&doneClicked);
+    if(addHandlers)
+    {
+        boatSelectionMouseHandler.addHandler(&material0Clicked);
+        boatSelectionMouseHandler.addHandler(&material1Clicked);
+        boatSelectionMouseHandler.addHandler(&material2Clicked);
+        boatSelectionMouseHandler.addHandler(&material3Clicked);
+        boatSelectionMouseHandler.addHandler(&material4Clicked);
+        boatSelectionMouseHandler.addHandler(&leftClicked);
+        boatSelectionMouseHandler.addHandler(&rightClicked);
+        boatSelectionMouseHandler.addHandler(&doneClicked);
+    }
 
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);        
     boatWindowId = glutCreateWindow(windowName);      
-    glutSetWindow(boatWindowId);      
+    // glutSetWindow(boatWindowId);      
     glutDisplayFunc(boatSelectionDisplay);  
     glutTimerFunc(17, boatSelectionTimer, 0);
     glutMouseFunc(boatSelectionMouse);

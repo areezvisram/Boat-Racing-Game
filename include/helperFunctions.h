@@ -22,6 +22,7 @@ struct Handler {
 
     void handleClickAt(unsigned int x, unsigned int y) {
         if (isInBounds(x, y)) {
+            std::cout << "clicked" << "\n";
             mHandlerFunc();
         }
     }
@@ -31,8 +32,9 @@ struct InteractionHandler {
     std::vector<Handler *> mHandlers;
 
     void leftClickDown(int x, int y) {
-        // std::cout << "Left click at " << x << ", " << y << std::endl;
-        for (Handler *handler : mHandlers) {            
+        // std::cout << "Left click at " << x << ", " << y << std::endl;        
+        std::cout << mHandlers.size() << "\n";
+        for (Handler *handler : mHandlers) {                        
             handler->handleClickAt(x,y);
         }
     }
@@ -59,13 +61,6 @@ const float globalMaterials[5][4][4] = {
      {{0.2125f, 0.1275f, 0.054f, 1.0f}, // bronze
       {0.714f, 0.4284f, 0.18144f, 1.0f},
       {0.393548f, 0.271906f, 0.166721f, 1.0f}}
-};
-
-// Material mats[5] = {
-//     Material(materials[0][0], materials[0][1], materials[0][2], 10),
-//     Material(materials[1][0], materials[1][1], materials[1][2], 10),
-//     Material(materials[2][0], materials[2][1], materials[2][2], 10),
-//     Material(materials[3][0], materials[3][1], materials[3][2], 10),
-//     Material(materials[4][0], materials[4][1], materials[4][2], 25.6)};   
+}; 
 
 #endif

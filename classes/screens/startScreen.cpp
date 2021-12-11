@@ -82,17 +82,17 @@ void oneBoat()
 {
     //glutHideWindow();
     glutDestroyWindow(windowId);
-    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 1);
+    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 1, 1);
     boatSelectionScreen.determineNumPlayers();
-    boatSelectionScreen.createWindow();
+    boatSelectionScreen.createWindow(true);
 }    
 
 void twoBoats()
 {
     glutDestroyWindow(windowId);
-    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 2);
+    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 2, 1);
     boatSelectionScreen.determineNumPlayers();
-    boatSelectionScreen.createWindow();
+    boatSelectionScreen.createWindow(true);
 }
 
 
