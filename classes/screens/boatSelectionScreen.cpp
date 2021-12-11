@@ -79,7 +79,6 @@ void BoatSelectionScreen::determineNumPlayers()
 
 void goToNextScreen()
 {
-    std::cout << "Go to next screen called with currentPlayerNum = " << currentPlayerNum << "\n";
     if(numberOfPlayers == 1)
     {
         glutDestroyWindow(boatWindowId);
@@ -89,7 +88,6 @@ void goToNextScreen()
     } 
     else if(numberOfPlayers == 2)
     {        
-        //std::cout << currentPlayerNum << "\n";
         if(currentPlayerNum == 1)
         {
             glutDestroyWindow(boatWindowId);
@@ -103,7 +101,6 @@ void goToNextScreen()
         } 
         else if(currentPlayerNum == 2)
         {
-            //std::cout << "CALLED" << "\n";
             glutDestroyWindow(boatWindowId);
             twoPlayerRaceScreen = TwoPlayerRaceScreen(800, 800, 2000, 50, "Player 2", twoPlayerInfo.at(0), twoPlayerInfo.at(1), boatIndex, globalMaterialIndex);
             twoPlayerRaceScreen.determineMaterial();
@@ -269,7 +266,6 @@ void boatSelectionDisplay()
 
 
     Boat boatSelection = boats.at(boatIndex);
-    // std::cout << boatSelection.rot.x << "\n";       
 
     glPushMatrix();
     glEnable(GL_LIGHTING);

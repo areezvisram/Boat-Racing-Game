@@ -36,9 +36,6 @@ Wall::Wall(std::vector<Point3D> vertices, Material material)
 
 Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
 {
-    // std::cout << vertex1.x << ", " << vertex1.y << ", " << vertex1.z << "\n";
-    // std::cout << vertex2.x << ", " << vertex2.y << ", " << vertex2.z << "\n";
-    // std::cout << vertex3.x << ", " << vertex3.y << ", " << vertex3.z << "\n";
     Vec3D edgeOne = Vec3D::createVector(vertex1, vertex2);
     Vec3D edgeTwo = Vec3D::createVector(vertex1, vertex3);
 
@@ -50,7 +47,6 @@ Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
 void Wall::draw() {
     glBegin(GL_POLYGON);
     Vec3D normal = calculateNormal(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);
-    //std::cout << normal.x << ", " << normal.y << ", " << normal.z << "\n";
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular);

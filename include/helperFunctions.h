@@ -22,7 +22,6 @@ struct Handler {
 
     void handleClickAt(unsigned int x, unsigned int y) {
         if (isInBounds(x, y)) {
-            std::cout << "clicked" << "\n";
             mHandlerFunc();
         }
     }
@@ -33,7 +32,6 @@ struct InteractionHandler {
 
     void leftClickDown(int x, int y) {
         // std::cout << "Left click at " << x << ", " << y << std::endl;        
-        std::cout << mHandlers.size() << "\n";
         for (Handler *handler : mHandlers) {                        
             handler->handleClickAt(x,y);
         }
