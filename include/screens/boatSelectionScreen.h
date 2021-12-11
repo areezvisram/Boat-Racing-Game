@@ -22,7 +22,7 @@ class BoatSelectionScreen
         int width, height, windowPosX, windowPosY, numPlayers, currentPlayer;
         const char* windowName;        
 
-        int createWindow(bool addHandlers);
+        void createWindow(bool addHandlers);
 
         void determineNumPlayers();
 };

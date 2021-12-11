@@ -22,7 +22,7 @@ class OnePlayerRaceScreen
         int width, height, windowPosX, windowPosY, materialIndex, boatIndex;
         const char* windowName;               
 
-        int createWindow();
+        void createWindow();
 
         void determineMaterial();
 };

@@ -325,7 +325,7 @@ void boatSelectionTimer(int value)
 
 }
 
-int BoatSelectionScreen::createWindow(bool addHandlers)
+void BoatSelectionScreen::createWindow(bool addHandlers)
 {
     if(addHandlers)
     {
@@ -341,12 +341,10 @@ int BoatSelectionScreen::createWindow(bool addHandlers)
 
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);        
-    boatWindowId = glutCreateWindow(windowName);      
-    // glutSetWindow(boatWindowId);      
+    boatWindowId = glutCreateWindow(windowName);         
     glutDisplayFunc(boatSelectionDisplay);  
     glutTimerFunc(17, boatSelectionTimer, 0);
     glutMouseFunc(boatSelectionMouse);
-    // return windowId;
 
     glutSetWindow(boatWindowId);
     glClearColor(0, 0, 0, 0);

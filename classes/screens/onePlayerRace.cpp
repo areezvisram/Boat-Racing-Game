@@ -30,12 +30,7 @@
 #include <map/wall.h>
 #include <screens/startScreen.h>
 
-// bool keystates[256] = {false};
-// bool sKeystates[4] = {false};
-
 Camera camera;
-Mesh mesh;
-Upgrade upgrade;
 Boat boatRace;
 
 float mat_ambient [4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
@@ -53,9 +48,9 @@ FileReader wallReader = FileReader("map/walls.txt");
 Material floorMaterial = Material(mat_ambient, mat_diffuse, mat_specular, shine);
 Material wallMaterial = Material(wall_ambient, wall_diffuse, wall_specular, wall_shine);
 
-std::vector<Floor> test_floors = floorReader.readFloorVertices(floorMaterial);
-std::vector<Wall> test_walls = wallReader.readWallVertices(wallMaterial);
-Map map = Map(test_walls, test_floors);
+std::vector<Floor> floors = floorReader.readFloorVertices(floorMaterial);
+std::vector<Wall> walls = wallReader.readWallVertices(wallMaterial);
+Map map = Map(walls, floors);
 
 bool keystates[256] = {false};
 bool sKeystates[4] = {false};
@@ -63,15 +58,6 @@ bool sKeystates[4] = {false};
 // Global variables
 float GLOBAL_WIDTH = 800;
 float GLOBAL_HEIGHT = 800;
-float cameraX = 100;
-float cameraY = 600;
-float cameraZ = 0;
-
-float cameraDirX = 0;
-float cameraDirY = 50;
-float cameraDirZ = 0;
-
-bool showLights = false;
 
 float lightPos[2][4] = {
     {-20, 200, -20, 1},
@@ -81,9 +67,6 @@ float lightAmb[2][4] = {
     {0.1, 0.1, 0.1, 1},
     {0.1, 0.1, 0.1, 1}};
 
-float lightEmis[2][4] = {
-    {1, 1, 1, 1},
-    {1, 1, 1, 1}};
 
 float floorAmb [4] = {0.05375f, 0.05f, 0.06625f, 0.82f};
 float floorDiff [4] = {0.18275f, 0.17f, 0.22525f, 0.82f};
@@ -163,8 +146,6 @@ void onePlayerRaceScreenDisplay()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    //glViewport(0,0,GLOBAL_WIDTH/2, GLOBAL_HEIGHT);
-    //glLoadIdentity();
     useCamera(boatRace);    
 
     glPushMatrix();    
@@ -173,7 +154,6 @@ void onePlayerRaceScreenDisplay()
         glRotatef(boatRace.rot.x, 1,0,0);
         glRotatef(boatRace.rot.y, 0,1,0);
         glRotatef(boatRace.rot.z, 0,0,1);
-        //glColor3f(0.7, 0.1, 0);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace][2]);
@@ -281,9 +261,8 @@ void init()
     glEnable(GL_CULL_FACE);
 }
 
-int OnePlayerRaceScreen::createWindow()
+void OnePlayerRaceScreen::createWindow()
 {        
-    // boatRace = Boat(Point3D(200, 10, 0), Boat::SPEED, Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
     boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);    

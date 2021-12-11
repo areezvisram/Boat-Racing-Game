@@ -123,7 +123,7 @@ void startScreenMouse(int button, int state, int x, int y)
     }
 }
 
-int StartScreen::createWindow()
+void StartScreen::createWindow()
 {
     mouseHandler.addHandler(&onePlayerClicked);
     mouseHandler.addHandler(&twoPlayerClicked);
@@ -132,6 +132,5 @@ int StartScreen::createWindow()
     windowId = glutCreateWindow(windowName);    
     glutDisplayFunc(startScreenDisplay);    
     glutMouseFunc(startScreenMouse);
-    return windowId;
 
 }

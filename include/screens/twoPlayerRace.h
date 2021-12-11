@@ -22,7 +22,7 @@ class TwoPlayerRaceScreen
         int width, height, windowPosX, windowPosY, material1Index, boat1Index, boat2Index, material2Index;
         const char* windowName;               
 
-        int createWindow();
+        void createWindow();
 
         void determineMaterial();
 };

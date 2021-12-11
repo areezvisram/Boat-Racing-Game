@@ -22,7 +22,7 @@ class StartScreen
         int width, height, windowPosX, windowPosY;
         const char* windowName;        
 
-        int createWindow();
+        void createWindow();
 };
 
 
