@@ -14,6 +14,15 @@
 #include <mathLib3D.h>
 #include <material.h>
 #include <iostream>
+#include <PPM.h>
+
+// GLuint texturesWall[2];
+
+// GLubyte* water_img;
+// int waterWidth, waterHeight, waterMax;
+
+// GLubyte* buoy_img;
+// int buoyWidth, buoyHeight, buoyMax;
 
 Wall::Wall() {
     vertices = {
@@ -44,7 +53,23 @@ Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
     return cross;
 }
 
+// void Wall::loadTextures()
+// {
+//     glEnable(GL_TEXTURE_2D);
+//     glGenTextures(1, texturesWall);
+
+//     glBindTexture(GL_TEXTURE_2D, texturesWall[1]);
+//     buoy_img = LoadPPM("textures/stone.ppm", &buoyWidth, &buoyHeight, &buoyMax);
+//     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, buoyWidth, buoyHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, buoy_img);
+//     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);  
+// }
+
 void Wall::draw() {
+    // glBindTexture(GL_TEXTURE_2D, texturesWall[0]);
+    glPushMatrix();
     glBegin(GL_POLYGON);
     Vec3D normal = calculateNormal(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient);
@@ -52,8 +77,18 @@ void Wall::draw() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular);
     glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, material.shiny); 
     glNormal3f(normal.x, normal.y, normal.z);
-    for(Point3D vertex : vertices) {
-        glVertex3f(vertex.x, vertex.y, vertex.z);
-    }
+    // for(Point3D vertex : vertices) {
+    //     glVertex3f(vertex.x, vertex.y, vertex.z);
+    // }
+    glTexCoord2f(0,0);
+    glVertex3f(vertices.at(0).x, vertices.at(0).y, vertices.at(0).z);
+    glTexCoord2f(1,0);
+    glVertex3f(vertices.at(1).x, vertices.at(1).y, vertices.at(1).z);
+    glTexCoord2f(1,1);
+    glVertex3f(vertices.at(2).x, vertices.at(2).y, vertices.at(2).z);
+    glTexCoord2f(0,1);
+    glVertex3f(vertices.at(3).x, vertices.at(3).y, vertices.at(3).z);
     glEnd();
+        glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

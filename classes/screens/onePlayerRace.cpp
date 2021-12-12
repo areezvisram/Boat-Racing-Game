@@ -29,26 +29,29 @@
 #include <map/map.h>
 #include <map/wall.h>
 #include <screens/startScreen.h>
+#include <PPM.h>
 
 Camera camera;
 Boat boatRace;
 
-float mat_ambient [4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
-float mat_diffuse [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
-float mat_specular [4] ={ 0.992157f, 0.941176f, 0.807843f, 1.0f };
-float shine = 27.8974f;
+float floor_ambient [4] ={ 1.0f, 1.0, 1.0f,1.0f };
+float floor_diffuse [4] ={ 0.0, 0.0, 0.0, 1.0f };
+float floor_specular [4] ={ 0.0, 0.0, 0.0, 1.0f };
+float floor_shine = 0.0f;
 
-float wall_ambient [4] = {0.0f, 0.1f, 0.06f, 1.0f};
-float wall_diffuse[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
-float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
-float wall_shine = 10.0f;
+// float wall_ambient [4] = {0.0f, 0.1f, 0.06f, 1.0f};
+// float wall_diffuse[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
+// float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
+// float wall_shine = 10.0f;
 
 FileReader floorReader = FileReader("map/floor.txt");
 FileReader wallReader = FileReader("map/walls.txt");
-Material floorMaterial = Material(mat_ambient, mat_diffuse, mat_specular, shine);
-Material wallMaterial = Material(wall_ambient, wall_diffuse, wall_specular, wall_shine);
+Material floorMaterial = Material(floor_ambient, floor_diffuse, floor_specular, floor_shine);
+Material wallMaterial = Material(floor_ambient, floor_diffuse, floor_specular, floor_shine);
 
 std::vector<Floor> floors = floorReader.readFloorVertices(floorMaterial);
+Floor loadingFloor = Floor();
+Wall loadingWall = Wall();
 std::vector<Wall> walls = wallReader.readWallVertices(wallMaterial);
 Map map = Map(walls, floors);
 
@@ -162,7 +165,6 @@ void onePlayerRaceScreenDisplay()
         drawAxis();
     glPopMatrix();
 
-
     glPushMatrix();
         map.render();
     glPopMatrix();    
@@ -259,6 +261,8 @@ void init()
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
+
+    // glEnable(GL_TEXTURE_2D);
 }
 
 void OnePlayerRaceScreen::createWindow()
@@ -268,6 +272,9 @@ void OnePlayerRaceScreen::createWindow()
     glutInitWindowPosition(windowPosX, windowPosY);    
     onePlayerRace = glutCreateWindow(windowName);   
     init();
+    // loadingFloor.loadTextures();    
+    // loadingWall.loadTextures();
+    map.loadTextures();
     glutReshapeFunc(reshape);
     glutSpecialFunc(specialDown);
     glutSpecialUpFunc(specialUp);

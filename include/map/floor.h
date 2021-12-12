@@ -15,6 +15,7 @@ class Floor {
         Material material;
 
         void draw();
+        void loadTextures();
 };
 
 #endif

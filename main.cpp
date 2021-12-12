@@ -11,6 +11,7 @@
 #endif
 
 #include <screens/startScreen.h>
+#include <helperFunctions.h>
 
 StartScreen startScreen = StartScreen(800, 800, 2000, 50, "Title Screen");
 

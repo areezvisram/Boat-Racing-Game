@@ -33,20 +33,15 @@
 Camera camera2;
 Boat boatRace1, boatRace2;
 
-float mat_ambient2 [4] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
-float mat_diffuse2 [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
-float mat_specular2 [4] ={ 0.992157f, 0.941176f, 0.807843f, 1.0f };
-float shine2 = 27.8974f;
-
-float wall_ambient2 [4] = {0.0f, 0.1f, 0.06f, 1.0f};
-float wall_diffuse2[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
-float wall_specular2[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
-float wall_shine2 = 10.0f;
+float floor_ambient_2 [4] ={ 1.0f, 1.0, 1.0f,1.0f };
+float floor_diffuse_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
+float floor_specular_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
+float floor_shine_2 = 0.0f;
 
 FileReader floorReader2 = FileReader("map/floor.txt");
 FileReader wallReader2 = FileReader("map/walls.txt");
-Material floorMaterial2 = Material(mat_ambient2, mat_diffuse2, mat_specular2, shine2);
-Material wallMaterial2 = Material(wall_ambient2, wall_diffuse2, wall_specular2, wall_shine2);
+Material floorMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
+Material wallMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
 
 std::vector<Floor> floors2 = floorReader2.readFloorVertices(floorMaterial2);
 std::vector<Wall> walls2 = wallReader2.readWallVertices(wallMaterial2);
@@ -176,7 +171,6 @@ void TwoPlayerRaceScreenDisplayOne()
         boatRace2.draw();
         drawAxis2();
     glPopMatrix();
-
 
     glPushMatrix();
         map2.render();
@@ -354,7 +348,8 @@ void TwoPlayerRaceScreen::createWindow()
 
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX + 1000, windowPosY);    
-    twoPlayerRaceScreenTwo = glutCreateWindow(windowName);       
+    twoPlayerRaceScreenTwo = glutCreateWindow(windowName);
+    map2.loadTextures();       
     glutReshapeFunc(reshape2);
     glutDisplayFunc(TwoPlayerRaceScreenDisplayTwo);
     glutTimerFunc(17, secondTimer, 0);   
@@ -371,4 +366,5 @@ void TwoPlayerRaceScreen::createWindow()
     glutTimerFunc(17, timer2, 0);    
 
     init2();
+    map2.loadTextures();
 }

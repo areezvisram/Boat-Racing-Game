@@ -15,6 +15,7 @@ class Wall {
         Material material;
 
         void draw();
+        void loadTextures();
 };
 
 #endif

@@ -14,6 +14,7 @@ class Map
         std::vector<Floor> floors;
 
         void render();
+        void loadTextures();
 };
 
 
