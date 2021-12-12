@@ -39,6 +39,11 @@ float floor_diffuse [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_specular [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_shine = 0.0f;
 
+float plane_amb[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
+float plane_diff[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
+float plane_spec[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f};
+float plane_shine = 10.0f;
+
 // float wall_ambient [4] = {0.0f, 0.1f, 0.06f, 1.0f};
 // float wall_diffuse[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
 // float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
@@ -46,14 +51,17 @@ float floor_shine = 0.0f;
 
 FileReader floorReader = FileReader("map/floor.txt");
 FileReader wallReader = FileReader("map/walls.txt");
+FileReader racePlaneReader = FileReader("map/racePlanes.txt");
 Material floorMaterial = Material(floor_ambient, floor_diffuse, floor_specular, floor_shine);
 Material wallMaterial = Material(floor_ambient, floor_diffuse, floor_specular, floor_shine);
+Material racePlaneMaterial = Material(plane_amb, plane_diff, plane_spec, plane_shine);
 
 std::vector<Floor> floors = floorReader.readFloorVertices(floorMaterial);
 Floor loadingFloor = Floor();
 Wall loadingWall = Wall();
 std::vector<Wall> walls = wallReader.readWallVertices(wallMaterial);
-Map map = Map(walls, floors);
+std::vector<RacePlane> racePlanes = racePlaneReader.readRacePlaneVertices(racePlaneMaterial);
+Map map = Map(walls, floors, racePlanes);
 
 bool keystates[256] = {false};
 bool sKeystates[4] = {false};

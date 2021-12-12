@@ -28,6 +28,7 @@
 #include <fileReader.h>
 #include <map/map.h>
 #include <map/wall.h>
+#include <map/racePlane.h>
 #include <screens/startScreen.h>
 
 Camera camera2;
@@ -38,14 +39,22 @@ float floor_diffuse_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_specular_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_shine_2 = 0.0f;
 
+float plane_amb2[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
+float plane_diff2[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
+float plane_spec2[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f};
+float plane_shine2 = 10.0f;
+
 FileReader floorReader2 = FileReader("map/floor.txt");
 FileReader wallReader2 = FileReader("map/walls.txt");
+FileReader racePlaneReader2 = FileReader("map/racePlanes.txt");
 Material floorMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
 Material wallMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
+Material racePlaneMaterial2 = Material(plane_amb2, plane_diff2, plane_spec2, plane_shine2);
 
 std::vector<Floor> floors2 = floorReader2.readFloorVertices(floorMaterial2);
 std::vector<Wall> walls2 = wallReader2.readWallVertices(wallMaterial2);
-Map map2 = Map(walls2, floors2);
+std::vector<RacePlane> racePlanes2 = racePlaneReader2.readRacePlaneVertices(racePlaneMaterial2);
+Map map2 = Map(walls2, floors2, racePlanes2);
 
 bool keystates2[256] = {false};
 bool sKeystates2[4] = {false};

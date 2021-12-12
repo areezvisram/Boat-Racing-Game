@@ -14,6 +14,7 @@
 #include <vector>
 #include <map/wall.h>
 #include <map/floor.h>
+#include <map/racePlane.h>
 #include <iostream>
 #include <PPM.h>
 
@@ -25,10 +26,11 @@ int waterWidth, waterHeight, waterMax;
 GLubyte* buoy_img;
 int buoyWidth, buoyHeight, buoyMax;
 
-Map::Map(std::vector<Wall> walls, std::vector<Floor> floors)
+Map::Map(std::vector<Wall> walls, std::vector<Floor> floors, std::vector<RacePlane> racePlanes)
 {
     this->walls = walls;
     this->floors = floors;
+    this->racePlanes = racePlanes;
 }
 
 void Map::loadTextures()
@@ -66,5 +68,10 @@ void Map::render()
     {
         glBindTexture(GL_TEXTURE_2D, textures[1]);
         wall.draw();
+    }
+
+    for(RacePlane racePlane : racePlanes)
+    {
+        racePlane.draw();
     }
 }
