@@ -17,6 +17,7 @@
 #include <object/boat.h>
 #include <iostream>
 #include <PPM.h>
+#include <screens/minimap.h>
 
 OnePlayerRaceScreen onePlayerRaceScreen;
 TwoPlayerRaceScreen twoPlayerRaceScreen;
