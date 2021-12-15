@@ -39,12 +39,11 @@ float floor_diffuse_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_specular_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_shine_2 = 0.0f;
 
-<<<<<<< HEAD
 float plane_amb2[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
 float plane_diff2[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
 float plane_spec2[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f};
 float plane_shine2 = 10.0f;
-=======
+
 float mini_ambient2 [4] ={ 1.0f, 1.0, 1.0f,1.0f };
 float mini_diffuse2 [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
 float mini_specular2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
@@ -57,23 +56,20 @@ float cameraZ2 = 0;
 float cameraDirX2 = 0;
 float cameraDirY2 = 50;
 float cameraDirZ2 = 0;
->>>>>>> master
 
 FileReader floorReader2 = FileReader("map/floor.txt");
 FileReader wallReader2 = FileReader("map/walls.txt");
 FileReader racePlaneReader2 = FileReader("map/racePlanes.txt");
 Material floorMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
 Material wallMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
-<<<<<<< HEAD
 Material racePlaneMaterial2 = Material(plane_amb2, plane_diff2, plane_spec2, plane_shine2);
-=======
 Material miniMapMaterial2 = Material(mini_ambient2, mini_diffuse2, mini_specular2, mini_shine2);
 
 
 std::vector<Floor> miniMapFloors2 = floorReader2.readFloorVertices(miniMapMaterial2);
 std::vector<Wall> miniMapWalls2;
-Map miniMap2 = Map(miniMapWalls2, miniMapFloors2);
->>>>>>> master
+std::vector<RacePlane> miniPlanes2;
+Map miniMap2 = Map(miniMapWalls2, miniMapFloors2, miniPlanes2);
 
 std::vector<Floor> floors2 = floorReader2.readFloorVertices(floorMaterial2);
 std::vector<Wall> walls2 = wallReader2.readWallVertices(wallMaterial2);
