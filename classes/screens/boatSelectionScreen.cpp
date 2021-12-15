@@ -17,7 +17,6 @@
 #include <object/boat.h>
 #include <iostream>
 #include <PPM.h>
-#include <screens/minimap.h>
 
 OnePlayerRaceScreen onePlayerRaceScreen;
 TwoPlayerRaceScreen twoPlayerRaceScreen;
@@ -26,7 +25,6 @@ BoatSelectionScreen playerTwoSelectionScreen;
 GLint boatWindowId;
 
 int numberOfPlayers, currentPlayerNum;
-//Boat boatSelection = Boat(Point3D(0, -0.3, 0), Boat::PIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
 std::vector<Boat> boats = 
 {
     Boat(Point3D(0, -0.1, 0), Boat::SPEED, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
