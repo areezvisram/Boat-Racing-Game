@@ -30,12 +30,16 @@
 #include <map/wall.h>
 #include <screens/startScreen.h>
 #include <PPM.h>
-// #include <screens/minimap.h>
+#include <chrono>
 
 Camera camera;
 Boat boatRace;
 // MiniMap miniMapScreen;
 
+// std::chrono::steady_clock raceTimer;
+auto begin = std::chrono::steady_clock::now();
+//std::chrono::duration<double> time_duration;
+std::string duration;
 
 float floor_ambient [4] ={ 1.0f, 1.0, 1.0f,1.0f };
 float floor_diffuse [4] ={ 0.0, 0.0, 0.0, 1.0f };
@@ -59,11 +63,6 @@ float cameraZ = 0;
 float cameraDirX = 0;
 float cameraDirY = 50;
 float cameraDirZ = 0;
-
-// float wall_ambient [4] = {0.0f, 0.1f, 0.06f, 1.0f};
-// float wall_diffuse[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
-// float wall_specular[4] =    {0.50196078f, 0.50196078f, 0.50196078f, 1.0f};
-// float wall_shine = 10.0f;
 
 FileReader floorReader = FileReader("map/floor.txt");
 FileReader wallReader = FileReader("map/walls.txt");
@@ -105,7 +104,8 @@ float floorDiff [4] = {0.18275f, 0.17f, 0.22525f, 0.82f};
 float floorSpec [4] = {0.332741f, 0.328634f, 0.346435f, 0.82f};
 
 GLint onePlayerRace;
-int globalMaterialIndexRace;
+int globalMaterialIndexRace, boatIndexRace;
+bool raceComplete = false;
 
 OnePlayerRaceScreen::OnePlayerRaceScreen()
 {
@@ -130,6 +130,7 @@ OnePlayerRaceScreen::OnePlayerRaceScreen(int width, int height, int windowPosX, 
 void OnePlayerRaceScreen::determineMaterial()
 {
     globalMaterialIndexRace = materialIndex;
+    boatIndexRace = boatIndex;
 }
 
 float red[4] = {1,0,0,1};
@@ -205,6 +206,15 @@ void onePlayerRaceScreenDisplay()
         map.render();
     glPopMatrix();  
     glClear(GL_DEPTH_BUFFER_BIT);
+
+    if(raceComplete)
+    {    
+        renderText(-0.50, 0.65, GLUT_STROKE_ROMAN, "Race Complete", 0.001);
+        renderText(-0.35, 0.50, GLUT_STROKE_ROMAN, "Your Time:", 0.001);
+        renderText(-0.35, 0.35, GLUT_STROKE_ROMAN, duration.c_str(), 0.001);
+        renderText(-0.45, 0.20, GLUT_STROKE_ROMAN, "Press r to restart the race", 0.0005);
+        renderText(-0.45, 0.05, GLUT_STROKE_ROMAN, "Press q to quit the program", 0.0005);
+    }
         
     glViewport(600, 600, 200, 200);
     glLoadIdentity();
@@ -261,7 +271,24 @@ void keyUp(unsigned char key, int x, int y)
     {
         case 'q':
             exit(0);
-            break;        
+            break;  
+        case 'r':
+            if(raceComplete)
+            {
+                glutDestroyWindow(onePlayerRace);
+                begin = std::chrono::steady_clock::now();
+                OnePlayerRaceScreen newScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndexRace, globalMaterialIndexRace);    
+                newScreen.determineMaterial();
+                newScreen.createWindow();
+            }            
+        case 't':
+            raceComplete = !raceComplete;                                             
+            auto end = std::chrono::steady_clock::now();
+            std::chrono::duration<double> elapsed = end - begin;
+            auto x = std::chrono::duration_cast<std::chrono::seconds>(elapsed);
+            duration = std::to_string(x.count());
+            duration += " seconds";
+            break;      
     }
 }
 
@@ -314,7 +341,7 @@ void init()
 }
 
 void OnePlayerRaceScreen::createWindow()
-{        
+{               
     boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);    
