@@ -27,6 +27,8 @@
 #include <map/map.h>
 #include <map/wall.h>
 
+Vec3D vec = Vec3D(1,0,0).normalize().multiply(10);
+
 Camera camera;
 Mesh mesh;
 Upgrade upgrade;
@@ -157,18 +159,40 @@ void display(void)
     glLoadIdentity();
 
     useCamera(boat);
-    //gluLookAt(cameraX, cameraY, cameraZ, cameraDirX, cameraDirY, cameraDirZ, 0, 1, 0);
+    // Point3D pos = Point3D(20,20,20);
+    // gluLookAt(pos.x,pos.y,pos.z, 0,0,0 , 0, 1, 0);
 
     glPushMatrix();
+
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
+    glColor3f(1, 1, 1);
+
+    // vec.calcRotation();
+
+    // glDisable(GL_LIGHTING);
+    // drawAxis();
+    // glLineWidth(10);
+    // glBegin(GL_LINES);
+    // glColor3f(0,1,0);
+    // glVertex3f(0,0,0);
+    // glColor3f(1,0,0);
+    // glVertex3f(vec.x, vec.y, vec.z);
+    // glEnd();
+    // glEnable(GL_LIGHTING);
 
     // glPushMatrix();
     //     drawFloor();
     // glPopMatrix();
     glPushMatrix();
         glTranslatef(boat.pos.x, boat.pos.y, boat.pos.z);
-        glRotatef(boat.rot.x, 1,0,0);
-        glRotatef(boat.rot.y, 0,1,0);
-        glRotatef(boat.rot.z, 0,0,1);
+        glPushMatrix();
+            glTranslatef(0, 3, 0);
+            drawAxis();
+        glPopMatrix();
+        glRotatef(-boat.rot.beta, 1,0,0);
+        glRotatef(-boat.rot.alpha, 0,1,0);
+        // glRotatef(boat.rot.z, 0,0,1);
         glColor3f(0.7, 0.1, 0);
         boat.draw();
         drawAxis();
@@ -177,10 +201,6 @@ void display(void)
     glPushMatrix();
         map.render();
     glPopMatrix();
-
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
-    glColor3f(1, 1, 1);
 
     glPopMatrix();
 
@@ -220,6 +240,24 @@ void keyUp(unsigned char key, int x, int y)
     {
         case 'q':
             exit(0);
+            break;
+        case 'x':
+            vec.x++;
+            break;
+        case 'X':
+            vec.x--;
+            break;
+        case 'z':
+            vec.z++;
+            break;
+        case 'Z':
+            vec.z--;
+            break;
+        case 'y':
+            vec.y++;;
+            break;
+        case 'Y':
+            vec.y--;
             break;
     }
 }
@@ -297,8 +335,8 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
     //upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
-    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), Vec3D(0, 180, 0), 100, 0.3, 0.7, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
-    boat.angularVel = Vec3D(0,0.1,0);
+    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), DirectionAngle(0,0), 100, 0.3, 0.7, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat.angularAcc = Vec3D(0,0.1,0);
     glutMainLoop();
     return (0);
 }

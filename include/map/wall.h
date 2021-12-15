@@ -13,6 +13,7 @@ class Wall {
 
         std::vector<Point3D> vertices;
         Material material;
+        Vec3D normal;
 
         void draw();
 };

@@ -1,15 +1,16 @@
 #include <object/boat.h>
 #include <cmath>
+#include <iostream>
 
 Boat::Boat() : Object(Point3D(), Mesh())
 {
-    rot = Vec3D();
+    rot = DirectionAngle();
     camera = Camera();
     dir = Vec3D(1,0,0);
     mass = 1;
 }
 
-Boat::Boat(Point3D pos, Mesh mesh, Vec3D rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
+Boat::Boat(Point3D pos, Mesh mesh, DirectionAngle rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
 {
     this->rot = rot;    
     this->mass = mass;
@@ -24,22 +25,50 @@ const float Boat::BREAK_FORCE_MAG = 0.5;
 const float Boat::FRICTION_FORCE_MAG = 0.1;
 // const float Boat::MIN_SPEED = 0.0001;
 //const float Boat::MAX_SPEED = 0.3;
+const float Boat::MAX_ANGULAR_SPEED = 1.0;
 
 void Boat::update(bool forward, bool back, bool left, bool right)
 {       
     thrusting = forward;
     breaking = back;
-    float rotInc = 0.8;    
+    // float rotInc = 0.8;    
+    angularAcc = Vec3D();
+    // angularVel = Vec3D();
     if (left)
     {
-        rot.y += rotInc;
+        // rot.y += rotInc;
+        angularAcc = Vec3D(0,-0.25,0);
     }
     if (right)
     {
-        rot.y -= rotInc;
+        // rot.y -= rotInc;
+        angularAcc = Vec3D(0,0.25,0);
     }
+    angularVel = angularVel.add(angularAcc);
+    if (std::abs(angularVel.y) > MAX_ANGULAR_SPEED)
+    {
+        angularVel.y = (angularVel.y / std::abs(angularVel.y)) * MAX_ANGULAR_SPEED;
+    }
+    //angular friction
+    if (std::abs(angularVel.y) > 0.025)
+    {
+        if (angularVel.y > 0)
+        {
+            angularVel = angularVel.add(Vec3D(0,-0.025,0));
+        }
+        else if (angularVel.y < 0)
+        {
+            angularVel = angularVel.add(Vec3D(0,0.025,0));
+        }
+    }
+    else
+    {
+        angularVel.y = 0;
+    }
+    // std::cout << angularAcc.toString() << std::endl;
+    rot = rot.add(DirectionAngle(angularVel.y, 0));
 
-    rot = rot.add(angularVel);
+    // std::cout << rot.toString() << std::endl;
 
     Vec3D force = sumForces();
     acc = force.multiply(1.0 / mass);
@@ -58,9 +87,9 @@ Vec3D Boat::forwardVector()
 {
     Vec3D straight = Vec3D(1,0,0);
     Vec3D rotVec = Vec3D(
-        straight.x * cosf(-Vec3D::toRadians(rot.y)) - straight.z * sinf(-Vec3D::toRadians(rot.y)),
+        straight.x * cosf(-Vec3D::toRadians(rot.alpha)) - straight.z * sinf(-Vec3D::toRadians(rot.alpha)),
         0,
-        straight.x * sinf(-Vec3D::toRadians(rot.y)) + straight.z * cosf(-Vec3D::toRadians(rot.y))
+        -(straight.x * sinf(-Vec3D::toRadians(rot.alpha)) + straight.z * cosf(-Vec3D::toRadians(rot.alpha)))
     );
     return rotVec;
 }
@@ -82,16 +111,4 @@ Vec3D Boat::sumForces()
     total = total.add(dir.multiply(-1 * FRICTION_FORCE_MAG));
 
     return total;
-}
-
-void Boat::moveForward(float distance)
-{
-    Vec3D straight = Vec3D(distance,0,0);
-    Vec3D rotVec = Vec3D(
-        straight.x * cosf(-Vec3D::toRadians(rot.y)) - straight.z * sinf(-Vec3D::toRadians(rot.y)),
-        0,
-        straight.x * sinf(-Vec3D::toRadians(rot.y)) + straight.z * cosf(-Vec3D::toRadians(rot.y))
-    );
-    pos = rotVec.movePoint(pos);
-
 }

@@ -2,6 +2,7 @@
 #define MATHLIB_3D_H
 
 #include <string>
+#include <directionAngle.h>
 
 class Point3D
 {
@@ -29,12 +30,14 @@ public:
     Vec3D normalize();
     Vec3D multiply(float scalar);
     Vec3D add(Vec3D vec);
+    DirectionAngle calcRotation();
     Point3D movePoint(Point3D source);
     std::string toString();
     static Vec3D createVector(Point3D p1, Point3D p2);
     static float dot(Vec3D v1, Vec3D v2);
     static Vec3D cross(Vec3D v1, Vec3D v2);
     static float toRadians(float degrees);
+    static float toDegrees(float radians);  
 };
 
 #endif
