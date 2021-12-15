@@ -276,11 +276,13 @@ void keyUp(unsigned char key, int x, int y)
             if(raceComplete)
             {
                 glutDestroyWindow(onePlayerRace);
+                raceComplete = false;
                 begin = std::chrono::steady_clock::now();
                 OnePlayerRaceScreen newScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndexRace, globalMaterialIndexRace);    
                 newScreen.determineMaterial();
-                newScreen.createWindow();
+                newScreen.createWindow();                
             }            
+            break;
         case 't':
             raceComplete = !raceComplete;                                             
             auto end = std::chrono::steady_clock::now();

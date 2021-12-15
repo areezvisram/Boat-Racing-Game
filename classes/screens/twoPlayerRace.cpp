@@ -97,6 +97,9 @@ float floorSpec2 [4] = {0.332741f, 0.328634f, 0.346435f, 0.82f};
 
 GLint twoPlayerRaceScreenOne, twoPlayerRaceScreenTwo;
 int globalMaterialIndexRace1, globalMaterialIndexRace2;
+int globalBoatIndex1, globalBoatIndex2;
+bool raceComplete2 = false;
+const char* winner;
 
 TwoPlayerRaceScreen::TwoPlayerRaceScreen()
 {
@@ -124,6 +127,8 @@ void TwoPlayerRaceScreen::determineMaterial()
 {
     globalMaterialIndexRace1 = material1Index;
     globalMaterialIndexRace2 = material2Index;
+    globalBoatIndex1 = boat1Index;
+    globalBoatIndex2 = boat2Index;
 }
 
 float red2[4] = {1,0,0,1};
@@ -212,6 +217,15 @@ void TwoPlayerRaceScreenDisplayOne()
     glPopMatrix();    
   
     glClear(GL_DEPTH_BUFFER_BIT);
+
+    if(raceComplete2)
+    {    
+        renderText(-0.50, 0.65, GLUT_STROKE_ROMAN, "Race Complete", 0.001);
+        renderText(-0.28, 0.50, GLUT_STROKE_ROMAN, "Winner:", 0.001);
+        renderText(-0.35, 0.35, GLUT_STROKE_ROMAN, winner, 0.001);
+        renderText(-0.45, 0.20, GLUT_STROKE_ROMAN, "Press r to restart the race", 0.0005);
+        renderText(-0.45, 0.05, GLUT_STROKE_ROMAN, "Press q to quit the program", 0.0005);
+    }
         
     glViewport(600, 600, 200, 200);
     glLoadIdentity();
@@ -281,6 +295,14 @@ void TwoPlayerRaceScreenDisplayTwo(void)
     glPopMatrix();  
 
     glClear(GL_DEPTH_BUFFER_BIT);
+    if(raceComplete2)
+    {    
+        renderText(-0.50, 0.65, GLUT_STROKE_ROMAN, "Race Complete", 0.001);
+        renderText(-0.28, 0.50, GLUT_STROKE_ROMAN, "Winner:", 0.001);
+        renderText(-0.35, 0.35, GLUT_STROKE_ROMAN, winner, 0.001);
+        renderText(-0.45, 0.20, GLUT_STROKE_ROMAN, "Press r to restart the race", 0.0005);
+        renderText(-0.45, 0.05, GLUT_STROKE_ROMAN, "Press q to quit the program", 0.0005);
+    }
         
     glViewport(600, 600, 200, 200);
     glLoadIdentity();
@@ -350,7 +372,37 @@ void keyUp2(unsigned char key, int x, int y)
     {
         case 'q':
             exit(0);
+            break;
+        case 'r':
+            if(raceComplete2)
+            {
+                // glutDestroyWindow(onePlayerRace);
+                // begin = std::chrono::steady_clock::now();
+                // OnePlayerRaceScreen newScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndexRace, globalMaterialIndexRace);    
+                // newScreen.determineMaterial();
+                // newScreen.createWindow();
+                glutDestroyWindow(twoPlayerRaceScreenTwo);
+                glutDestroyWindow(twoPlayerRaceScreenOne);                
+                raceComplete2 = false;
+                TwoPlayerRaceScreen newTwoScreen = TwoPlayerRaceScreen(800, 800, 2000, 50, "Player 2", globalBoatIndex1, globalMaterialIndexRace1, globalBoatIndex2, globalMaterialIndexRace2);
+                newTwoScreen.determineMaterial();
+                newTwoScreen.createWindow();
+            }  
+            break;          
+        case 't':
+            raceComplete2 = !raceComplete2;                                             
+            // auto end = std::chrono::steady_clock::now();
+            // std::chrono::duration<double> elapsed = end - begin;
+            // auto x = std::chrono::duration_cast<std::chrono::seconds>(elapsed);
+            // duration = std::to_string(x.count());
+            // duration += " seconds";
             break;        
+        case '1':
+            winner = "Player One";
+            break;
+        case '2':
+            winner = "Player Two";
+            break;                                     
     }
 }
 
