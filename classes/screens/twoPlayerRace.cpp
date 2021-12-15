@@ -38,10 +38,29 @@ float floor_diffuse_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_specular_2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_shine_2 = 0.0f;
 
+float mini_ambient2 [4] ={ 1.0f, 1.0, 1.0f,1.0f };
+float mini_diffuse2 [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
+float mini_specular2 [4] ={ 0.0, 0.0, 0.0, 1.0f };
+float mini_shine2 = 0.0f;
+
+float cameraX2 = 5;
+float cameraY2 = 500;
+float cameraZ2 = 0;
+
+float cameraDirX2 = 0;
+float cameraDirY2 = 50;
+float cameraDirZ2 = 0;
+
 FileReader floorReader2 = FileReader("map/floor.txt");
 FileReader wallReader2 = FileReader("map/walls.txt");
 Material floorMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
 Material wallMaterial2 = Material(floor_ambient_2, floor_diffuse_2, floor_specular_2, floor_shine_2);
+Material miniMapMaterial2 = Material(mini_ambient2, mini_diffuse2, mini_specular2, mini_shine2);
+
+
+std::vector<Floor> miniMapFloors2 = floorReader2.readFloorVertices(miniMapMaterial2);
+std::vector<Wall> miniMapWalls2;
+Map miniMap2 = Map(miniMapWalls2, miniMapFloors2);
 
 std::vector<Floor> floors2 = floorReader2.readFloorVertices(floorMaterial2);
 std::vector<Wall> walls2 = wallReader2.readWallVertices(wallMaterial2);
@@ -141,11 +160,17 @@ void TwoPlayerRaceScreenDisplayOne()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+
+    glScissor(0,0,800,800);
+    glViewport(0,0,800, 800);
+    glLoadIdentity();    
 
     useCamera2(boatRace1);    
 
-    glPushMatrix();    
+    glPushMatrix(); 
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos2[0] );
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb2[0]);
+    glColor3f(1, 1, 1);   
     glPushMatrix();
         glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
         glRotatef(boatRace1.rot.x, 1,0,0);
@@ -175,10 +200,24 @@ void TwoPlayerRaceScreenDisplayOne()
     glPushMatrix();
         map2.render();
     glPopMatrix();    
+  
+    glClear(GL_DEPTH_BUFFER_BIT);
+        
+    glViewport(600, 600, 200, 200);
+    glLoadIdentity();
+    gluLookAt(cameraX2, cameraY2, cameraZ2, cameraDirX2, cameraDirY2, cameraDirZ2, 0, 1, 0);
 
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos2[0] );
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb2[0]);
-    glColor3f(1, 1, 1);
+    glPushMatrix();
+        glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
+        glutSolidSphere(10,16,16);
+    glPopMatrix();
+
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glColor3f(1,1,1);
+        miniMap2.render();
+    glPopMatrix();  
+    glEnable(GL_LIGHTING);   
 
     glPopMatrix();
 
@@ -190,11 +229,15 @@ void TwoPlayerRaceScreenDisplayTwo(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+        glScissor(0,0,800,800);
+    glViewport(0,0,800, 800);
     glLoadIdentity();
 
     useCamera2(boatRace2);    
 
-    glPushMatrix();    
+    glPushMatrix();  
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos2[0] );
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb2[0]);  
     glPushMatrix();
         glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
         glRotatef(boatRace1.rot.x, 1,0,0);
@@ -227,8 +270,25 @@ void TwoPlayerRaceScreenDisplayTwo(void)
         map2.render();
     glPopMatrix();  
 
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos2[0] );
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb2[0]);
+    glClear(GL_DEPTH_BUFFER_BIT);
+        
+    glViewport(600, 600, 200, 200);
+    glLoadIdentity();
+    gluLookAt(cameraX2, cameraY2, cameraZ2, cameraDirX2, cameraDirY2, cameraDirZ2, 0, 1, 0);
+
+    glPushMatrix();
+        glTranslatef(boatRace2.pos.x, boatRace2.pos.y, boatRace2.pos.z);
+        glutSolidSphere(10,16,16);
+    glPopMatrix();
+
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glColor3f(1,1,1);
+        miniMap2.render();
+    glPopMatrix();  
+    glEnable(GL_LIGHTING);   
+
+    glPopMatrix();
     glColor3f(1, 1, 1);
 
     glPopMatrix();
@@ -330,6 +390,7 @@ void init2()
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_SCISSOR_TEST);
 
     glutSetWindow(twoPlayerRaceScreenOne);
     glClearColor(0.6, 0.6, 0.6, 0);
