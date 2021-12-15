@@ -30,19 +30,35 @@
 #include <map/wall.h>
 #include <screens/startScreen.h>
 #include <PPM.h>
+// #include <screens/minimap.h>
 
 Camera camera;
 Boat boatRace;
+// MiniMap miniMapScreen;
+
 
 float floor_ambient [4] ={ 1.0f, 1.0, 1.0f,1.0f };
 float floor_diffuse [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_specular [4] ={ 0.0, 0.0, 0.0, 1.0f };
 float floor_shine = 0.0f;
 
+float mini_ambient [4] ={ 1.0f, 1.0, 1.0f,1.0f };
+float mini_diffuse [4] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
+float mini_specular [4] ={ 0.0, 0.0, 0.0, 1.0f };
+float mini_shine = 0.0f;
+
 float plane_amb[4] = {0.1745f, 0.01175f, 0.01175f, 0.55f};
 float plane_diff[4] = {0.61424f, 0.04136f, 0.04136f, 0.55f};
 float plane_spec[4] = {0.727811f, 0.626959f, 0.626959f, 0.55f};
 float plane_shine = 10.0f;
+
+float cameraX = 5;
+float cameraY = 500;
+float cameraZ = 0;
+
+float cameraDirX = 0;
+float cameraDirY = 50;
+float cameraDirZ = 0;
 
 // float wall_ambient [4] = {0.0f, 0.1f, 0.06f, 1.0f};
 // float wall_diffuse[4] =  {0.0f, 0.50980392f, 0.50980392f, 1.0f};
@@ -56,12 +72,17 @@ Material floorMaterial = Material(floor_ambient, floor_diffuse, floor_specular, 
 Material wallMaterial = Material(floor_ambient, floor_diffuse, floor_specular, floor_shine);
 Material racePlaneMaterial = Material(plane_amb, plane_diff, plane_spec, plane_shine);
 
+Material miniMapMaterial = Material(mini_ambient, mini_diffuse, mini_specular, mini_shine);
+
 std::vector<Floor> floors = floorReader.readFloorVertices(floorMaterial);
-Floor loadingFloor = Floor();
-Wall loadingWall = Wall();
 std::vector<Wall> walls = wallReader.readWallVertices(wallMaterial);
 std::vector<RacePlane> racePlanes = racePlaneReader.readRacePlaneVertices(racePlaneMaterial);
 Map map = Map(walls, floors, racePlanes);
+
+std::vector<Floor> miniMapFloors = floorReader.readFloorVertices(miniMapMaterial);
+std::vector<Wall> miniMapWalls;
+std::vector<RacePlane> miniPlanes;
+Map miniMap = Map(miniMapWalls, miniMapFloors, miniPlanes);
 
 bool keystates[256] = {false};
 bool sKeystates[4] = {false};
@@ -155,11 +176,18 @@ void onePlayerRaceScreenDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+
+    glScissor(0,0,800,800);
+    glViewport(0,0,800, 800);
     glLoadIdentity();
 
     useCamera(boatRace);    
 
     glPushMatrix();    
+
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
+    glColor3f(1, 1, 1);
     glPushMatrix();
         glTranslatef(boatRace.pos.x, boatRace.pos.y, boatRace.pos.z);
         glRotatef(boatRace.rot.x, 1,0,0);
@@ -175,11 +203,24 @@ void onePlayerRaceScreenDisplay()
 
     glPushMatrix();
         map.render();
-    glPopMatrix();    
+    glPopMatrix();  
+    glClear(GL_DEPTH_BUFFER_BIT);
+        
+    glViewport(600, 600, 200, 200);
+    glLoadIdentity();
+    gluLookAt(cameraX, cameraY, cameraZ, cameraDirX, cameraDirY, cameraDirZ, 0, 1, 0);
 
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
-    glColor3f(1, 1, 1);
+    glPushMatrix();
+        glTranslatef(boatRace.pos.x, boatRace.pos.y, boatRace.pos.z);
+        glutSolidSphere(10,16,16);
+    glPopMatrix();
+
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glColor3f(1,1,1);
+        miniMap.render();
+    glPopMatrix();  
+    glEnable(GL_LIGHTING);        
 
     glPopMatrix();
 
@@ -204,7 +245,7 @@ void timer(int value)
 {
     boatRace.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);        
     glutSetWindow(onePlayerRace);
-    glutPostRedisplay();
+    glutPostRedisplay();    
     glutTimerFunc(17, timer, 0);
 }
 
@@ -269,8 +310,7 @@ void init()
     glFrontFace(GL_CCW);
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);
-
-    // glEnable(GL_TEXTURE_2D);
+    glEnable(GL_SCISSOR_TEST);
 }
 
 void OnePlayerRaceScreen::createWindow()
