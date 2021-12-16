@@ -2,10 +2,13 @@
 #define BOAT_H
 
 #include <object/object.h>
+#include <object/boundingBox.h>
 #include <mathLib3D.h>
 #include <mesh/mesh.h>
 #include <camera.h>
 #include <directionAngle.h>
+#include <plane.h>
+#include <vector>
 
 class Boat : public Object
 {
@@ -33,10 +36,14 @@ class Boat : public Object
         Vec3D angularVel;
         Vec3D angularAcc;
         Camera camera;
+        BoundingBox boundingBox;
 
         void update(bool forward, bool back, bool left, bool right);
         Vec3D forwardVector();
         Vec3D sumForces();
+        void drawBoundingBoxes();
+        std::vector<Plane> calculatePlanes();
+        void intersects(std::vector<Plane> planes, Plane wall);
 };
 
 #endif

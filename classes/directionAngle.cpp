@@ -1,4 +1,5 @@
 #include <directionAngle.h>
+#include <mathLib3D.h>
 
 DirectionAngle::DirectionAngle()
 {
@@ -15,6 +16,11 @@ DirectionAngle::DirectionAngle(float alpha, float beta)
 DirectionAngle DirectionAngle::add(DirectionAngle angle)
 {
     return DirectionAngle(alpha + angle.alpha, beta + angle.beta);
+}
+
+DirectionAngle DirectionAngle::inverse()
+{
+    return Vec3D::createVector(DirectionAngle(alpha, beta), 1).multiply(-1).calcRotation();
 }
 
 std::string DirectionAngle::toString()

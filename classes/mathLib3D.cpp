@@ -115,6 +115,14 @@ Vec3D Vec3D::createVector(Point3D p1, Point3D p2)
 {
     return Vec3D(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
 }
+Vec3D Vec3D::createVector(DirectionAngle a, float length)
+{
+    Vec3D out;
+    out.x = cosf(Vec3D::toRadians(a.alpha)) * cosf(Vec3D::toRadians(a.beta));
+    out.z = sinf(Vec3D::toRadians(a.alpha)) * cosf(Vec3D::toRadians(a.beta));
+    out.y = sinf(Vec3D::toRadians(a.beta));
+    return out.multiply(length);
+}
 float Vec3D::dot(Vec3D v1, Vec3D v2)
 {
     return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);

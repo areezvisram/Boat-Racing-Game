@@ -23,6 +23,8 @@ Wall::Wall() {
         Point3D(0, 0, 0),
     };
     normal = Vec3D(0,1,0);
+    width = 0;
+    height = 0;
 }
 
 Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
@@ -38,6 +40,8 @@ Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
 Wall::Wall(std::vector<Point3D> vertices) {
     this->vertices = vertices;
     this->normal = calculateNormal(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);
+    this->width = vertices[0].distanceTo(vertices[1]);
+    this->height = vertices[1].distanceTo(vertices[2]);
 }
 
 Wall::Wall(std::vector<Point3D> vertices, Material material) 
@@ -137,4 +141,21 @@ void Wall::draw() {
     glVertex3f(pos.x, 15, pos.z);
     glEnd();
     glEnable(GL_LIGHTING);
+}
+
+Plane Wall::toPlane()
+{
+    Point3D pos;
+
+    for(Point3D v : this->vertices)
+    {
+        pos.x += v.x;
+        pos.y += v.y;
+        pos.z += v.z;
+    }
+    pos.x /= 4.0;
+    pos.y /= 4.0;
+    pos.z /= 4.0;
+
+    return Plane(pos, this->normal, width, height);
 }

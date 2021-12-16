@@ -1,3 +1,15 @@
+#ifdef __APPLE__
+    #define GL_SILENCE_DEPRECATION
+    #include <OpenGL/gl.h>
+    #include <OpenGL/glu.h>
+    #include <GLUT/glut.h>
+#else
+    #include <windows.h>
+    #include <GL/gl.h>
+    #include <GL/glu.h>
+    #include <GL/freeglut.h>
+#endif
+
 #include <object/boat.h>
 #include <cmath>
 #include <iostream>
@@ -8,6 +20,7 @@ Boat::Boat() : Object(Point3D(), Mesh())
     camera = Camera();
     dir = Vec3D(1,0,0);
     mass = 1;
+    boundingBox = BoundingBox();
 }
 
 Boat::Boat(Point3D pos, Mesh mesh, DirectionAngle rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
@@ -18,6 +31,7 @@ Boat::Boat(Point3D pos, Mesh mesh, DirectionAngle rot, float mass, float max_spe
     this->thrust_force_mag = thrust_force_mag;
     this->camera = camera;
     this->dir = Vec3D(1,0,0);
+    this->boundingBox = BoundingBox(Point3D(0,0,0), Vec3D(5,2.5,2.5), DirectionAngle(0,0));
 }
 
 //const float Boat::THRUST_FORCE_MAG = 0.7;
@@ -31,18 +45,14 @@ void Boat::update(bool forward, bool back, bool left, bool right)
 {       
     thrusting = forward;
     breaking = back;
-    // float rotInc = 0.8;    
     angularAcc = Vec3D();
-    // angularVel = Vec3D();
     if (left)
     {
-        // rot.y += rotInc;
-        angularAcc = Vec3D(0,-0.25,0);
+        angularAcc = Vec3D(0,-0.05,0);
     }
     if (right)
     {
-        // rot.y -= rotInc;
-        angularAcc = Vec3D(0,0.25,0);
+        angularAcc = Vec3D(0,0.05,0);
     }
     angularVel = angularVel.add(angularAcc);
     if (std::abs(angularVel.y) > MAX_ANGULAR_SPEED)
@@ -65,10 +75,7 @@ void Boat::update(bool forward, bool back, bool left, bool right)
     {
         angularVel.y = 0;
     }
-    // std::cout << angularAcc.toString() << std::endl;
     rot = rot.add(DirectionAngle(angularVel.y, 0));
-
-    // std::cout << rot.toString() << std::endl;
 
     Vec3D force = sumForces();
     acc = force.multiply(1.0 / mass);
@@ -111,4 +118,85 @@ Vec3D Boat::sumForces()
     total = total.add(dir.multiply(-1 * FRICTION_FORCE_MAG));
 
     return total;
+}
+
+void Boat::drawBoundingBoxes()
+{
+    glPushMatrix();
+    // glLoadIdentity();
+    glTranslatef(-pos.x, -pos.y, -pos.z);
+    glDisable(GL_LIGHTING);
+    glPointSize(10);
+    glColor3f(1,0,0);
+    glBegin(GL_POINTS);
+    glVertex3f(pos.x, pos.y, pos.z);
+
+    Point3D end = forwardVector().multiply(boundingBox.size.x / 2.0).movePoint(pos);
+    glVertex3f(end.x, end.y, end.z);
+    // end = forwardVector().multiply(boundingBox.size.x / 2.0).multiply(-1).movePoint(pos);
+    // glVertex3f(end.x, end.y, end.z);
+    // end = Vec3D::createVector(forwardVector().calcRotation().add(DirectionAngle(90,0)), 1).multiply(boundingBox.size.z / 2.0).movePoint(pos);
+    // glVertex3f(end.x, end.y, end.z);
+    // end = Vec3D::createVector(forwardVector().calcRotation().add(DirectionAngle(-90,0)), 1).multiply(boundingBox.size.z / 2.0).movePoint(pos);
+    // glVertex3f(end.x, end.y, end.z);
+
+    glEnd();
+
+    glTranslatef(pos.x, pos.y, pos.z);
+    glRotatef(-this->rot.beta, 1,0,0);
+    glRotatef(-this->rot.alpha, 0,1,0);
+    glScalef(boundingBox.size.x,boundingBox.size.y,boundingBox.size.z);
+
+    glutWireCube(1);
+
+    glEnable(GL_LIGHTING);
+    glPopMatrix();
+}
+
+std::vector<Plane> Boat::calculatePlanes()
+{
+    std::vector<Plane> out;
+
+    Vec3D n = forwardVector();
+    Point3D planePos = n.multiply(boundingBox.size.x / 2.0).movePoint(pos);
+    out.push_back(Plane(planePos, n, boundingBox.size.z, boundingBox.size.y / 2.0));
+
+    n = forwardVector().multiply(-1);
+    planePos = n.multiply(boundingBox.size.x / 2.0).movePoint(pos);
+    out.push_back(Plane(planePos, n, boundingBox.size.z, boundingBox.size.y / 2.0));
+
+    // n = forwardVector();
+    n = Vec3D::createVector(forwardVector().calcRotation().add(DirectionAngle(90,0)), 1);
+    planePos = n.multiply(boundingBox.size.z / 2.0).movePoint(pos);
+    out.push_back(Plane(planePos, n, boundingBox.size.x, boundingBox.size.y / 2.0));
+
+    n = Vec3D::createVector(forwardVector().calcRotation().add(DirectionAngle(-90,0)), 1);
+    planePos = n.multiply(boundingBox.size.z / 2.0).movePoint(pos);
+    out.push_back(Plane(planePos, n, boundingBox.size.x, boundingBox.size.y / 2.0));
+
+    return out;
+}
+
+void Boat::intersects(std::vector<Plane> planes, Plane wall)
+{
+
+    // for(long long unsigned int i = 0; i < planes.size(); i++)
+    // {
+        int i = 0;
+        Plane p = Plane(planes[i].pos, planes[i].normal, planes[i].width, planes[i].height);
+        Plane w = Plane(wall.pos, wall.normal, wall.width, wall.height);
+
+        Vec3D itrans = Vec3D::createVector(p.pos, Point3D());
+        DirectionAngle irot = p.normal.calcRotation();
+        irot.alpha *= -1;
+        irot.beta *= -1;
+
+        //inverse translate
+        p.pos = itrans.movePoint(p.pos);
+        w.pos = itrans.movePoint(w.pos);
+
+        std::cout << p.pos.toString() << " " << p.normal.toString() << std::endl;
+        std::cout << w.pos.toString() << " " << w.normal.toString() << std::endl;
+
+    // }
 }

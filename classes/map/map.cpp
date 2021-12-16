@@ -20,5 +20,6 @@ void Map::render()
     for(Wall wall : walls)
     {
         wall.draw();
+        break;
     }
 }

@@ -12,6 +12,7 @@ public:
     float beta;
 
     DirectionAngle add(DirectionAngle angle);
+    DirectionAngle inverse();
     std::string toString();
 };
 

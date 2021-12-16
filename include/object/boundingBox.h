@@ -7,6 +7,7 @@
 class BoundingBox
 {
 public:
+    BoundingBox();
     BoundingBox(Point3D pos, Vec3D size, DirectionAngle rot);
 
     Point3D pos;

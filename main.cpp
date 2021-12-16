@@ -100,6 +100,7 @@ float black[4] = {0,0,0,1};
 void drawAxis()
 {
     glPushMatrix();
+    glDisable(GL_LIGHTING);
     glLineWidth(2);
     glBegin(GL_LINES);
 
@@ -118,6 +119,7 @@ void drawAxis()
     glVertex3f(0.0, 0.0, 0.0);
     glVertex3f(0.0, 0.0, 5.0);
     glEnd();
+    glEnable(GL_LIGHTING);
     glPopMatrix();
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
 }
@@ -190,12 +192,16 @@ void display(void)
             glTranslatef(0, 3, 0);
             drawAxis();
         glPopMatrix();
+        glPushMatrix();
         glRotatef(-boat.rot.beta, 1,0,0);
         glRotatef(-boat.rot.alpha, 0,1,0);
         // glRotatef(boat.rot.z, 0,0,1);
         glColor3f(0.7, 0.1, 0);
-        boat.draw();
-        drawAxis();
+        // boat.draw();
+        glPopMatrix();
+        boat.drawBoundingBoxes();
+
+        // drawAxis();
     glPopMatrix();
 
     glPushMatrix();
@@ -335,8 +341,11 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     init();
     //upgrade = Upgrade(Point3D(), Mesh::createFromOBJ("obj/upgrade.obj"), Vec3D(0,1,0));
-    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), DirectionAngle(0,0), 100, 0.3, 0.7, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
+    boat = Boat(Point3D(200, 15, 0), Mesh::createFromOBJ("obj/boat2.obj"), DirectionAngle(180,0), 100, 0.3, 0.7, Camera(Point3D(-10, 5, 0), Vec3D::createVector(Point3D(-5, 10, 0), Point3D()), 45));
     boat.angularAcc = Vec3D(0,0.1,0);
+
+    boat.intersects(boat.calculatePlanes(), map.walls[0].toPlane());
+
     glutMainLoop();
     return (0);
 }
