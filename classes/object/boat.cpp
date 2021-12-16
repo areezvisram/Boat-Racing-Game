@@ -20,7 +20,7 @@ Boat::Boat(Point3D pos, BoatType type, Vec3D rot, Camera camera) : Object(pos, M
         case BoatType::FISHING:
             this->mesh = Mesh::createFromOBJ("obj/boat2.obj");
             this->mass = 250;
-            this->max_speed = 0.3;
+            this->max_speed = 0.5;
             this->thrust_force_mag = 0.3;
             break;
         case BoatType::SPEED:
