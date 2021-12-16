@@ -13,7 +13,7 @@
 #include <screens/startScreen.h>
 #include <helperFunctions.h>
 
-StartScreen startScreen = StartScreen(800, 800, 2000, 50, "Title Screen");
+StartScreen startScreen = StartScreen(800, 800, 200, 100, "Title Screen");
 
 // Initialize glut 
 void initGlut()

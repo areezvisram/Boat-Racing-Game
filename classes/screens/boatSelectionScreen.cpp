@@ -84,7 +84,7 @@ void goToNextScreen()
     if(numberOfPlayers == 1)
     {
         glutDestroyWindow(boatWindowId);
-        onePlayerRaceScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndex, globalMaterialIndex);    
+        onePlayerRaceScreen = OnePlayerRaceScreen(800, 800, 200, 50, "Player 1", boatIndex, globalMaterialIndex);    
         onePlayerRaceScreen.determineMaterial();
         onePlayerRaceScreen.createWindow();
     } 
@@ -95,7 +95,7 @@ void goToNextScreen()
             glutDestroyWindow(boatWindowId);
             twoPlayerInfo.push_back(boatIndex);
             twoPlayerInfo.push_back(globalMaterialIndex);
-            playerTwoSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 2, 2);
+            playerTwoSelectionScreen = BoatSelectionScreen(800, 800, 200, 50, "Boat Selection", 2, 2);
             globalMaterialIndex = 0;
             boatIndex = 0;
             playerTwoSelectionScreen.determineNumPlayers();
@@ -104,7 +104,7 @@ void goToNextScreen()
         else if(currentPlayerNum == 2)
         {
             glutDestroyWindow(boatWindowId);
-            twoPlayerRaceScreen = TwoPlayerRaceScreen(800, 800, 2000, 50, "Player 2", twoPlayerInfo.at(0), twoPlayerInfo.at(1), boatIndex, globalMaterialIndex);
+            twoPlayerRaceScreen = TwoPlayerRaceScreen(800, 800, 0, 50, "Player One", twoPlayerInfo.at(0), twoPlayerInfo.at(1), boatIndex, globalMaterialIndex);
             twoPlayerRaceScreen.determineMaterial();
             twoPlayerRaceScreen.createWindow();
         }
@@ -168,56 +168,56 @@ void increaseBoatIndex()
 Handler material0Clicked = {
     160,
     240,
-    120,
-    40,
+    140,
+    60,
     setMaterialOne
 };
 
 Handler material1Clicked = {
     260,
     340,
-    120,
-    40,
+    140,
+    60,
     setMaterialZero
 };
 
 Handler material2Clicked = {
     360,
     440,
-    120,
-    40,
+    140,
+    60,
     setMaterialTwo
 };
 
 Handler material3Clicked = {
     460,
     540,
-    120,
-    40,
+    140,
+    60,
     setMaterialThree
 };
 
 Handler material4Clicked = {
     560,
     640,
-    120,
-    40,
+    140,
+    60,
     setMaterialFour
 };
 
 Handler leftClicked = {
     220,
     320,
-    215,
-    160,
+    240,
+    180,
     decreaseBoatIndex
 };
 
 Handler rightClicked = {
     460,
     560,
-    215,
-    160,
+    240,
+    180,
     increaseBoatIndex
 };
 
@@ -225,8 +225,8 @@ Handler doneClicked =
 {
     670,
     750,
-    80,
-    40,
+    100,
+    50,
     goToNextScreen
 };
 

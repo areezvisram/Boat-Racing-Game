@@ -69,15 +69,13 @@ void startScreenDisplay()
     renderText(-0.95, -0.20, GLUT_STROKE_ROMAN, "How many players would you like to race with?", 0.0006);        
     glPopMatrix();
 
-    glPushMatrix();
-    onePlayerImage = LoadPPM("images/oneplayer.ppm", &onePlayerWidth, &onePlayerHeight, &onePlayerMax);
+    glPushMatrix();    
     glRasterPos2f(-0.10, -0.50);
     glPixelZoom(-1, 1);
     glDrawPixels(onePlayerWidth, onePlayerHeight, GL_RGB, GL_UNSIGNED_BYTE, onePlayerImage);
     glPopMatrix();
 
-    glPushMatrix();
-    twoPlayerImage = LoadPPM("images/twoplayer.ppm", &twoPlayerWidth, &twoPlayerHeight, &twoPlayerMax);
+    glPushMatrix();    
     glRasterPos2f(0.80, -0.50);
     glPixelZoom(-1, 1);
     glDrawPixels(twoPlayerWidth, twoPlayerHeight, GL_RGB, GL_UNSIGNED_BYTE, twoPlayerImage);
@@ -90,7 +88,7 @@ void startScreenDisplay()
 void oneBoat()
 {    
     glutDestroyWindow(windowId);
-    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 1, 1);
+    boatSelectionScreen = BoatSelectionScreen(800, 800, 200, 50, "Boat Selection", 1, 1);
     boatSelectionScreen.determineNumPlayers();
     boatSelectionScreen.createWindow(true);
 }    
@@ -99,7 +97,7 @@ void oneBoat()
 void twoBoats()
 {
     glutDestroyWindow(windowId);
-    boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 2, 1);
+    boatSelectionScreen = BoatSelectionScreen(800, 800, 200, 50, "Boat Selection", 2, 1);
     boatSelectionScreen.determineNumPlayers();
     boatSelectionScreen.createWindow(true);
 }
@@ -108,16 +106,16 @@ void twoBoats()
 Handler onePlayerClicked = {
     60,
     360,
-    250,
-    200,
+    270,
+    220,
     oneBoat
 };
 
 Handler twoPlayerClicked = {
     420,
     720,
-    250,
-    200,
+    270,
+    220,
     twoBoats
 };
 
@@ -150,6 +148,8 @@ void reshapeStart(int w, int h)
 // "main" function for this class
 void StartScreen::createWindow()
 {
+    onePlayerImage = LoadPPM("images/oneplayer.ppm", &onePlayerWidth, &onePlayerHeight, &onePlayerMax);
+    twoPlayerImage = LoadPPM("images/twoplayer.ppm", &twoPlayerWidth, &twoPlayerHeight, &twoPlayerMax);
     mouseHandler.addHandler(&onePlayerClicked);
     mouseHandler.addHandler(&twoPlayerClicked);
     glutInitWindowSize(width, height);

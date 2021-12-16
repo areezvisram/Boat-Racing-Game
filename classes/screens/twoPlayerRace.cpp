@@ -438,8 +438,8 @@ void TwoPlayerRaceScreen::createWindow()
     boatRace2 = Boat(Point3D(200,10,2), Boat::BoatType(boat2Index), Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
 
     glutInitWindowSize(width, height);
-    glutInitWindowPosition(windowPosX + 1000, windowPosY);    
-    twoPlayerRaceScreenTwo = glutCreateWindow(windowName);
+    glutInitWindowPosition(windowPosX + 800, windowPosY);    
+    twoPlayerRaceScreenTwo = glutCreateWindow("Player Two");
     map2.loadTextures();       
     glutReshapeFunc(reshape2);
     glutDisplayFunc(TwoPlayerRaceScreenDisplayTwo);

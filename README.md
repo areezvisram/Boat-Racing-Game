@@ -28,25 +28,30 @@ makefile provided as part of the submission as it has been changed to compile co
     * Easier use of strings
 * fstream
     * Used in object loader
-
-### **Prototype Writeup**
-Our current prototype contains a boat with the ability to drive around the screen using the arrow keys controlled by the user.
-A camera follows the boat from behind at all times. The boat has motion physics, but the turning does not yet use proper physics.
-The physics include acceleration, braking and friction. The prototype also includes a power-up class which can be put in the scene, it just has no functionality yet. Our prototype has also been created with extreme modularity, so the implementation of new models or additional classes will be much easier. Lighting has also been implemented as part of the prototype. One design decision we made was to include the view of the xyz axes
-in the prototype so we know where the boat is relative to the center. This is just for prototype purposes, it will not be included in final submission. Finally, as part of the prototype we have looked into adding a second screen (split screen), and know how to do it, we just haven't included it as part of the prototype. We want to get more of the game built out before we actually implement split screen, but we now have the knowledge on how to do it.
-
-Features that need to be added for the final game are a title screen, where the user can choose which boat they want to race with. Also, more boat models, which have different stats. We also need to design and implement a map for the race to take place on. We also need to add improved physics for the boats, such as collision detection with the boundaries of the map, other boats,
-and powerups. Powerups is another functionality we need to implement (class is done and model is done, just no functionality implemented). Lastly, we need to implement the addition of a second screen for a second player to play on (we have researched this as mentioned above), as well as (time permitting) AI controlled boats for the user to race against.
-
-#### **Notes:**
-A list of the key bindings and the action they pertain to:
-
+* chrono
+    * Used in timing the race
+#### **Instructions and Key Bindings:**
+* Run the program
+* Use mouse to select one player or two players on first screen
+* On next screen, click on arrows to toggle through boats
+* Click materials to change material
+* Click done when complete
+* For race:
 **KEYBOARD COMMANDS (case sensitive)**
-* q - Quit the program
-* UP_ARROW - Move boat forward
-* DOWN_ARROW - Move boat backwards
-* RIGHT_ARROW - Move boat to the right
-* LEFT_ARROW - Move boat to the left
+* q - Quit the program (at any time)
+* r - Restart race (only when completed)
+* UP_ARROW - Move player one boat forward
+* DOWN_ARROW - Move player one boat backwards
+* RIGHT_ARROW - Move player one boat to the right
+* LEFT_ARROW - Move player one boat to the left
+If 2 player:
+* w - Move player two boat forward
+* a - Move player two boat backwards
+* s - Move player two boat to the right
+* d - Move player two boat to the left
 
-
-boat2 - https://free3d.com/3d-model/boat-low-poly-431802.html
+#### **Boat Models**
+* Speedboat - https://free3d.com/3d-model/wakeboard-boat-v1--979173.html
+* Fishing boat - https://free3d.com/3d-model/boat-low-poly-431802.html
+* Small pirate ship - https://www.turbosquid.com/3d-models/free-ship-3d-model/378524
+* Big pirate ship - https://www.turbosquid.com/3d-models/historic-ship-3d-model/671135

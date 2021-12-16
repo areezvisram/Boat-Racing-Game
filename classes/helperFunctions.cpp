@@ -26,8 +26,7 @@ void renderText(float x, float y, void *font, const char *string, float scaleFac
     glPushMatrix();
     glLoadIdentity();
 
-    glDisable(GL_DEPTH_TEST);
-    //glRasterPos2f(x,y);
+    glDisable(GL_DEPTH_TEST);    
     glTranslatef(x,y,0);
     glColor3f(1.0f, 1.0f, 1.0f);
     glScalef(scaleFactor, scaleFactor, scaleFactor);
