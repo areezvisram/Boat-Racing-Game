@@ -13,8 +13,11 @@
 class Boat : public Object
 {
     public:
+
+        enum BoatType {SPEED, FISHING, PIRATE, SMALLPIRATE};
+
         Boat();
-        Boat(Point3D position, Mesh mesh, DirectionAngle rotation, float mass, float max_speed, float thrust_force_mag, Camera camera);
+        Boat(Point3D position, BoatType type, Mesh mesh, DirectionAngle rotation, float mass, float max_speed, float thrust_force_mag, Camera camera);
         
         //static const float THRUST_FORCE_MAG;
         static const float BREAK_FORCE_MAG;

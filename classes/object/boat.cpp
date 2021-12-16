@@ -23,18 +23,41 @@ Boat::Boat() : Object(Point3D(), Mesh())
     boundingBox = BoundingBox();
 }
 
-Boat::Boat(Point3D pos, Mesh mesh, DirectionAngle rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
+Boat::Boat(Point3D pos, BoatType type, Mesh mesh, DirectionAngle rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
 {
     this->rot = rot;    
-    this->mass = mass;
-    this->max_speed = max_speed;
-    this->thrust_force_mag = thrust_force_mag;
     this->camera = camera;
     this->dir = Vec3D(1,0,0);
     this->boundingBox = BoundingBox(Point3D(0,0,0), Vec3D(5,2.5,2.5), DirectionAngle(0,0));
+    switch(type)
+    {
+        case BoatType::FISHING:
+            this->mesh = Mesh::createFromOBJ("obj/boat2.obj");
+            this->mass = 250;
+            this->max_speed = 0.5;
+            this->thrust_force_mag = 0.3;
+            break;
+        case BoatType::SPEED:
+            this->mesh = Mesh::createFromOBJ("obj/speed.obj");
+            this->mass = 100;
+            this->max_speed = 0.5;
+            this->thrust_force_mag = 0.5;
+            break;
+        case BoatType::PIRATE:
+            this->mesh = Mesh::createFromOBJ("obj/pirate.obj");
+            this->mass = 500;
+            this->max_speed = 0.2;
+            this->thrust_force_mag = 0.2;
+            break;
+        case BoatType::SMALLPIRATE:
+            this->mesh = Mesh::createFromOBJ("obj/smallPirate.obj");
+            this->mass = 325;
+            this->max_speed = 0.4;
+            this->thrust_force_mag = 0.4; 
+            break;                                    
+    }
 }
 
-//const float Boat::THRUST_FORCE_MAG = 0.7;
 const float Boat::BREAK_FORCE_MAG = 0.5;
 const float Boat::FRICTION_FORCE_MAG = 0.1;
 // const float Boat::MIN_SPEED = 0.0001;
@@ -42,7 +65,8 @@ const float Boat::FRICTION_FORCE_MAG = 0.1;
 const float Boat::MAX_ANGULAR_SPEED = 1.0;
 
 void Boat::update(bool forward, bool back, bool left, bool right)
-{       
+{      
+
     thrusting = forward;
     breaking = back;
     angularAcc = Vec3D();

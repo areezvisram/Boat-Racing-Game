@@ -14,6 +14,7 @@
 #include <mathLib3D.h>
 #include <material.h>
 #include <iostream>
+#include <PPM.h>
 
 Wall::Wall() {
     vertices = {
@@ -79,68 +80,26 @@ void drawAxis(float size)
     glEnable(GL_LIGHTING);
 }
 
+// Draw wall
 void Wall::draw() {
-    // Point3D pos;
-
-    // for(Point3D vertex : vertices)
-    // {
-    //     pos.x += vertex.x;
-    //     pos.y += vertex.y;
-    //     pos.z += vertex.z;
-    // }
-
-    // pos.x /= 4.0;
-    // pos.y /= 4.0;
-    // pos.z /= 4.0;
-
-    // glPushMatrix();
-    // // glTranslatef(pos.x,pos.y,pos.z);
-    // glDisable(GL_LIGHTING);
-    // glLoadIdentity();
-    // glPointSize(10);
-    // glColor3f(1,0,0);
-    // glBegin(GL_POINTS);
-    // glVertex3f(pos.x,pos.y,pos.z);
-    // glEnd();
-    // // drawAxis(3);
-    // glEnable(GL_LIGHTING);
-    // glPopMatrix();
-
-
-
-    // Vec3D n = calculateNormal(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);
+    glPushMatrix();
     glBegin(GL_POLYGON);
-    //std::cout << normal.x << ", " << normal.y << ", " << normal.z << "\n";
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular);
     glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, material.shiny); 
     glNormal3f(this->normal.x, this->normal.y, this->normal.z);
-    for(Point3D vertex : vertices) {
-        glVertex3f(vertex.x, vertex.y, vertex.z);
-    }
+    glTexCoord2f(0,0);
+    glVertex3f(vertices.at(0).x, vertices.at(0).y, vertices.at(0).z);
+    glTexCoord2f(1,0);
+    glVertex3f(vertices.at(1).x, vertices.at(1).y, vertices.at(1).z);
+    glTexCoord2f(1,1);
+    glVertex3f(vertices.at(2).x, vertices.at(2).y, vertices.at(2).z);
+    glTexCoord2f(0,1);
+    glVertex3f(vertices.at(3).x, vertices.at(3).y, vertices.at(3).z);
     glEnd();
-
-    Point3D pos = Point3D();
-
-    glDisable(GL_LIGHTING);
-    glPointSize(20);
-    glBegin(GL_POINTS);
-    glColor3f(1,0,0);
-    for(Point3D vertex : vertices)
-    {
-        glVertex3f(vertex.x, vertex.y, vertex.z);
-        pos.x += vertex.x;
-        pos.y += vertex.y;
-        pos.z += vertex.z;
-    }
-    pos.x /= 4.0;
-    pos.y /= 4.0;
-    pos.z /= 4.0;
-
-    glVertex3f(pos.x, 15, pos.z);
-    glEnd();
-    glEnable(GL_LIGHTING);
+    glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Plane Wall::toPlane()
