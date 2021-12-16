@@ -23,7 +23,7 @@ Boat::Boat() : Object(Point3D(), Mesh())
     boundingBox = BoundingBox();
 }
 
-Boat::Boat(Point3D pos, BoatType type, Mesh mesh, DirectionAngle rot, float mass, float max_speed, float thrust_force_mag, Camera camera) : Object(pos, mesh)
+Boat::Boat(Point3D pos, BoatType type, DirectionAngle rot, Camera camera) : Object(pos, Mesh())
 {
     this->rot = rot;    
     this->camera = camera;

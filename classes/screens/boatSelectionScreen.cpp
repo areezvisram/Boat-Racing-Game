@@ -17,6 +17,7 @@
 #include <object/boat.h>
 #include <iostream>
 #include <PPM.h>
+#include <directionAngle.h>
 
 // Globals
 OnePlayerRaceScreen onePlayerRaceScreen;
@@ -28,10 +29,10 @@ GLint boatWindowId;
 int numberOfPlayers, currentPlayerNum;
 std::vector<Boat> boats = 
 {
-    Boat(Point3D(0, -0.1, 0), Boat::SPEED, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
-    Boat(Point3D(0, -0.1, 0), Boat::FISHING, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
-    Boat(Point3D(0, -0.3, 0), Boat::PIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),    
-    Boat(Point3D(0, -0.2, 0), Boat::SMALLPIRATE, Vec3D(0, 0, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),    
+    Boat(Point3D(0, -0.1, 0), Boat::SPEED, DirectionAngle(), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
+    Boat(Point3D(0, -0.1, 0), Boat::FISHING, DirectionAngle(), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),
+    Boat(Point3D(0, -0.3, 0), Boat::PIRATE, DirectionAngle(), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),    
+    Boat(Point3D(0, -0.2, 0), Boat::SMALLPIRATE, DirectionAngle(), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45)),    
 };
 
 int globalMaterialIndex = 1;
@@ -279,9 +280,9 @@ void boatSelectionDisplay()
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndex][2]);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
     glTranslatef(boatSelection.pos.x, boatSelection.pos.y, boatSelection.pos.z);
-    glRotatef(boatSelection.rot.x, 1,0,0);
-    glRotatef(boatSelection.rot.y, 0,1,0);
-    glRotatef(boatSelection.rot.z, 0,0,1);
+    glRotatef(-boatSelection.rot.alpha, 1,0,0);
+    glRotatef(-boatSelection.rot.beta, 0,1,0);
+    // glRotatef(boatSelection.rot.z, 0,0,1);
     boatSelection.draw();
     glPopMatrix();
 

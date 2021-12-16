@@ -51,7 +51,7 @@ void RacePlane::draw() {
     glPushMatrix();
     glBegin(GL_POLYGON);
     Vec3D normal = calculateNormal2(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);    
-    glColor4f(1,1,1,0);
+    glColor4f(1,0,0,1);
     glNormal3f(normal.x, normal.y, normal.z);    
     glVertex3f(vertices.at(0).x, vertices.at(0).y, vertices.at(0).z);    
     glVertex3f(vertices.at(1).x, vertices.at(1).y, vertices.at(1).z);    
