@@ -8,6 +8,9 @@
 #include <camera.h>
 #include <directionAngle.h>
 #include <plane.h>
+#include <map/wall.h>
+#include <map/racePlane.h>
+#include <force.h>
 #include <vector>
 
 class Boat : public Object
@@ -40,13 +43,16 @@ class Boat : public Object
         Vec3D angularAcc;
         Camera camera;
         BoundingBox boundingBox;
+        Force colForce;
+        std::vector<int> checkpoints;
 
-        void update(bool forward, bool back, bool left, bool right);
+        void update(bool forward, bool back, bool left, bool right, std::vector<Wall> walls, std::vector<RacePlane> racePlanes);
         Vec3D forwardVector();
         Vec3D sumForces();
         void drawBoundingBoxes();
         std::vector<Plane> calculatePlanes();
-        void intersects(std::vector<Plane> planes, Plane wall);
+        Force intersects(std::vector<Plane> planes, std::vector<Wall> walls);
+        int intersectsCheckpoint(std::vector<Plane> planes, std::vector<RacePlane> walls);
 };
 
 #endif

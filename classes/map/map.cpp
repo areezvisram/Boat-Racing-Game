@@ -70,7 +70,6 @@ void Map::render()
     {
         glBindTexture(GL_TEXTURE_2D, textures[1]);
         wall.draw();
-        // break;
     }
 
     for(RacePlane racePlane : racePlanes)

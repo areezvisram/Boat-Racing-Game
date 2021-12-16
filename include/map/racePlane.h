@@ -4,6 +4,8 @@
 #include <mathLib3D.h>
 #include <vector>
 #include <material.h>
+#include <map/wall.h>
+#include <map/racePlane.h>
 
 class RacePlane {
     public:
@@ -16,6 +18,8 @@ class RacePlane {
 
         void draw();
         void loadTextures();
+        Wall toWall();
+
 };
 
 #endif

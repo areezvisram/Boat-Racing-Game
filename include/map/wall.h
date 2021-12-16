@@ -15,10 +15,10 @@ class Wall {
         std::vector<Point3D> vertices;
         Material material;
         Vec3D normal;
-        float width;
-        float height;
 
         void draw();
+        float calcWidth();
+        float calcHeight();
         Plane toPlane();
 };
 

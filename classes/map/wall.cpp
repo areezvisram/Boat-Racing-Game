@@ -24,8 +24,6 @@ Wall::Wall() {
         Point3D(0, 0, 0),
     };
     normal = Vec3D(0,1,0);
-    width = 0;
-    height = 0;
 }
 
 Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
@@ -41,8 +39,6 @@ Vec3D calculateNormal(Point3D vertex1, Point3D vertex2, Point3D vertex3)
 Wall::Wall(std::vector<Point3D> vertices) {
     this->vertices = vertices;
     this->normal = calculateNormal(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);
-    this->width = vertices[0].distanceTo(vertices[1]);
-    this->height = vertices[1].distanceTo(vertices[2]);
 }
 
 Wall::Wall(std::vector<Point3D> vertices, Material material) 
@@ -100,6 +96,43 @@ void Wall::draw() {
     glEnd();
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    // glPushMatrix();
+    // Point3D pos = Point3D();
+    // for (Point3D v : vertices)
+    // {
+    //     pos.x += v.x;
+    //     pos.y += v.y;
+    //     pos.z += v.z;
+    // }
+    // pos.x /= 4.0;
+    // pos.y = 11;
+    // // pos.y /= 4.0;
+    // pos.z /= 4.0;
+
+    // // std::cout << pos.toString() << std::endl;
+
+    // glDisable(GL_LIGHTING);
+    // glLineWidth(5);
+    // // glPointSize(10);
+    // glColor3f(0,1,0);
+    // glBegin(GL_LINES);
+    // glVertex3f(pos.x, pos.y, pos.z);
+    // Point3D end = this->normal.multiply(-3).movePoint(pos);
+    // glVertex3f(end.x, end.y, end.z);
+    // glEnd();
+    // glEnable(GL_LIGHTING);
+    // glPopMatrix();
+}
+
+float Wall::calcWidth()
+{
+    return this->vertices[0].distanceTo(this->vertices[1]);
+}
+
+float Wall::calcHeight()
+{
+    return this->vertices[1].distanceTo(this->vertices[2]);
 }
 
 Plane Wall::toPlane()
@@ -116,5 +149,5 @@ Plane Wall::toPlane()
     pos.y /= 4.0;
     pos.z /= 4.0;
 
-    return Plane(pos, this->normal, width, height);
+    return Plane(pos, this->normal, calcWidth(), calcHeight());
 }

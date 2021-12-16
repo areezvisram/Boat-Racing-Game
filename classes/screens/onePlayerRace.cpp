@@ -30,12 +30,17 @@
 #include <map/wall.h>
 #include <screens/startScreen.h>
 #include <directionAngle.h>
+#include <plane.h>
+#include <force.h>
 #include <PPM.h>
 #include <chrono>
 
 // Globals
 Camera camera;
 Boat boatRace;
+
+Plane testPlane = Plane(Point3D(), Vec3D(), 0, 0);
+Plane testWall = Plane(Point3D(), Vec3D(), 0, 0);
 
 auto begin = std::chrono::steady_clock::now();
 std::string duration;
@@ -143,6 +148,34 @@ void useCamera(Boat b)
     gluLookAt(camPos.x, camPos.y, camPos.z, pos.x, pos.y, pos.z, 0,1,0);
 }
 
+void axis(float size)
+{
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glLineWidth(2);
+    glBegin(GL_LINES);
+
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, red); // red x
+    glColor3f (1.0, 0.0, 0.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glVertex3f(size, 0.0, 0.0);
+
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow); // yellow y
+    glColor3f (1.0, 1.0, 0.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glVertex3f(0.0, size, 0.0);
+
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, blue); // blue z
+    glColor3f (0.0, 0.0, 1.0);
+    glVertex3f(0.0, 0.0, 0.0);
+    glVertex3f(0.0, 0.0, size);
+    glEnd();
+    glPopMatrix();
+    // glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+
+    glEnable(GL_LIGHTING);
+}
+
 // Display function
 void onePlayerRaceScreenDisplay()
 {
@@ -159,17 +192,23 @@ void onePlayerRaceScreenDisplay()
 
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos[0] );
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb[0]);
+    
+    axis(10);
+
     glColor3f(1, 1, 1);
     glPushMatrix();
         glTranslatef(boatRace.pos.x, boatRace.pos.y, boatRace.pos.z);
-        glRotatef(-boatRace.rot.beta, 1,0,0);
-        glRotatef(-boatRace.rot.alpha, 0,1,0);
-        // glRotatef(boatRace.rot.z, 0,0,1);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace][0]);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace][1]);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace][2]);
-        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace.draw();        
+        glPushMatrix();
+            glRotatef(-boatRace.rot.beta, 1,0,0);
+            glRotatef(-boatRace.rot.alpha, 0,1,0);
+            // glRotatef(boatRace.rot.z, 0,0,1);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace][0]);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace][1]);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace][2]);
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
+            boatRace.draw();
+        glPopMatrix();
+        // boatRace.drawBoundingBoxes();
     glPopMatrix();
 
     glPushMatrix();
@@ -224,7 +263,16 @@ void reshape(int w, int h)
 // Timer function
 void timer(int value)
 {
-    boatRace.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);        
+    boatRace.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2], map.walls, map.racePlanes); 
+    if (boatRace.checkpoints.size() == 0)
+    {
+        raceComplete = true;                                             
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsed = end - begin;
+        auto x = std::chrono::duration_cast<std::chrono::seconds>(elapsed);
+        duration = std::to_string(x.count());
+        duration += " seconds";
+    }
     glutSetWindow(onePlayerRace);
     glutPostRedisplay();    
     glutTimerFunc(17, timer, 0);
@@ -321,7 +369,8 @@ void init()
 // "main" function for this class
 void OnePlayerRaceScreen::createWindow()
 {               
-    boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    // boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-30, 15, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
     boatRace.angularAcc = Vec3D(0,0.1,0);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);    

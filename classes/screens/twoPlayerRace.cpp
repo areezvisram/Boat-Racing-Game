@@ -164,6 +164,7 @@ void TwoPlayerRaceScreenDisplayOne()
     glColor3f(1, 1, 1);   
     glPushMatrix();
         glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
+        glPushMatrix();
         glRotatef(-boatRace1.rot.beta, 1,0,0);
         glRotatef(-boatRace1.rot.alpha, 0,1,0);
         // glRotatef(boatRace1.rot.z, 0,0,1);
@@ -171,11 +172,14 @@ void TwoPlayerRaceScreenDisplayOne()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace1][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace1][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace1.draw();        
+        boatRace1.draw();   
+        glPopMatrix();
+        // boatRace1.drawBoundingBoxes();     
     glPopMatrix();
 
     glPushMatrix();
         glTranslatef(boatRace2.pos.x, boatRace2.pos.y, boatRace2.pos.z);
+        glPushMatrix();
         glRotatef(-boatRace2.rot.beta, 1,0,0);
         glRotatef(-boatRace2.rot.alpha, 0,1,0);
         // glRotatef(boatRace2.rot.z, 0,0,1);
@@ -183,7 +187,9 @@ void TwoPlayerRaceScreenDisplayOne()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace2][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace2][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace2.draw();        
+        boatRace2.draw();
+        glPopMatrix();
+        // boatRace2.drawBoundingBoxes();
     glPopMatrix();
 
     glPushMatrix();
@@ -238,6 +244,7 @@ void TwoPlayerRaceScreenDisplayTwo(void)
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb2[0]);  
     glPushMatrix();
         glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
+        glPushMatrix();
         glRotatef(-boatRace1.rot.beta, 1,0,0);
         glRotatef(-boatRace1.rot.alpha, 0,1,0);
         // glRotatef(boatRace1.rot.z, 0,0,1);
@@ -245,11 +252,14 @@ void TwoPlayerRaceScreenDisplayTwo(void)
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace1][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace1][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace1.draw();        
+        boatRace1.draw();  
+        glPopMatrix();
+        // boatRace1.drawBoundingBoxes();      
     glPopMatrix();
 
     glPushMatrix();
         glTranslatef(boatRace2.pos.x, boatRace2.pos.y, boatRace2.pos.z);
+        glPushMatrix();
         glRotatef(-boatRace2.rot.beta, 1,0,0);
         glRotatef(-boatRace2.rot.alpha, 0,1,0);
         // glRotatef(boatRace2.rot.z, 0,0,1);     
@@ -258,6 +268,8 @@ void TwoPlayerRaceScreenDisplayTwo(void)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace2][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
         boatRace2.draw();
+        glPopMatrix();
+        // boatRace2.drawBoundingBoxes();
     glPopMatrix();
 
 
@@ -316,8 +328,17 @@ void reshape2(int w, int h)
 // Timer function
  void timer2(int value)
 {
-    boatRace1.update(sKeystates2[1], sKeystates2[3], sKeystates2[0], sKeystates2[2]);    
-    boatRace2.update(keystates2[(unsigned char)'w'], keystates2[(unsigned char)'s'], keystates2[(unsigned char)'a'], keystates2[(unsigned char)'d']);
+    boatRace1.update(sKeystates2[1], sKeystates2[3], sKeystates2[0], sKeystates2[2], map2.walls, map2.racePlanes);    
+    boatRace2.update(keystates2[(unsigned char)'w'], keystates2[(unsigned char)'s'], keystates2[(unsigned char)'a'], keystates2[(unsigned char)'d'], map2.walls, map2.racePlanes);
+    if (boatRace1.checkpoints.size() == 0)
+    {
+        winner = "Player One";
+        raceComplete2 = true;    
+    } else if (boatRace2.checkpoints.size() == 0)
+    {
+        winner = "Player Two";
+        raceComplete2 = true;    
+    }
     glutSetWindow(twoPlayerRaceScreenOne);
     glutPostRedisplay();    
     glutTimerFunc(17, timer2, 0);
@@ -326,8 +347,17 @@ void reshape2(int w, int h)
 // Timer function for second screen
 void secondTimer(int value)
 {
-    boatRace1.update(sKeystates2[1], sKeystates2[3], sKeystates2[0], sKeystates2[2]);    
-    boatRace2.update(keystates2[(unsigned char)'w'], keystates2[(unsigned char)'s'], keystates2[(unsigned char)'a'], keystates2[(unsigned char)'d']);
+    boatRace1.update(sKeystates2[1], sKeystates2[3], sKeystates2[0], sKeystates2[2], map2.walls, map2.racePlanes);    
+    boatRace2.update(keystates2[(unsigned char)'w'], keystates2[(unsigned char)'s'], keystates2[(unsigned char)'a'], keystates2[(unsigned char)'d'], map2.walls, map2.racePlanes);
+    if (boatRace1.checkpoints.size() == 0)
+    {
+        winner = "Player One";
+        raceComplete2 = true;    
+    } else if (boatRace2.checkpoints.size() == 0)
+    {
+        winner = "Player Two";
+        raceComplete2 = true;    
+    }
     glutSetWindow(twoPlayerRaceScreenTwo);
     glutPostRedisplay();    
     glutTimerFunc(17, secondTimer, 0);
