@@ -39,28 +39,28 @@ Boat::Boat(Point3D pos, BoatType type, DirectionAngle rot, Camera camera) : Obje
     switch(type)
     {
         case BoatType::FISHING:
-            this->mesh = Mesh::createFromOBJ("obj/boat2.obj");
+            this->mesh = Mesh::createFromOBJ("objects/boat2.obj");
             this->mass = 250;
             // this->max_speed = 0.5;
             this->max_speed = 0.1;
             this->thrust_force_mag = 0.3;
             break;
         case BoatType::SPEED:
-            this->mesh = Mesh::createFromOBJ("obj/speed.obj");
+            this->mesh = Mesh::createFromOBJ("objects/speed.obj");
             this->mass = 100;
             // this->max_speed = 0.5;
             this->max_speed = 0.1;
             this->thrust_force_mag = 0.5;
             break;
         case BoatType::PIRATE:
-            this->mesh = Mesh::createFromOBJ("obj/pirate.obj");
+            this->mesh = Mesh::createFromOBJ("objects/pirate.obj");
             this->mass = 500;
             // this->max_speed = 0.2;
             this->max_speed = 0.1;
             this->thrust_force_mag = 0.2;
             break;
         case BoatType::SMALLPIRATE:
-            this->mesh = Mesh::createFromOBJ("obj/smallPirate.obj");
+            this->mesh = Mesh::createFromOBJ("objects/smallPirate.obj");
             this->mass = 325;
             // this->max_speed = 0.4;
             this->max_speed = 0.1;

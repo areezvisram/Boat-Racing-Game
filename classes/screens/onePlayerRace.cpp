@@ -369,8 +369,7 @@ void init()
 // "main" function for this class
 void OnePlayerRaceScreen::createWindow()
 {               
-    // boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
-    boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-30, 15, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
     boatRace.angularAcc = Vec3D(0,0.1,0);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);    

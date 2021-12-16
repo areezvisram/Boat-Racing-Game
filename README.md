@@ -17,6 +17,24 @@ Please note that a lot of external classes were created in the `classes` folder.
 makefile provided as part of the submission as it has been changed to compile correctly with our file structure.
 
 ### **Main Program**
+**Description**:
+For our final project, we decided to make a racing game. In this game, you are a boat on a water racetrack that is at the bottom of a canyon. Your goal is to complete the track as fast as possible. If you choose the 1 player mode, your time will be displayed upon completion. If you choose the 2 player mode, the player who completes the race first win!
+
+When starting the game, your first choice is 1 player or 2 player mode. From there you must pick your boat and material. Than the game is started!
+
+**Prototype Differences:**
+++ Added materials and textures to all objects in scene
+++ Added menus to initialize the game in different states
+++ Improved physics
+++ Added checkpoints and main game loop
+++ Added custom collision detection for checkpoints
+++ Added timer and ability to restart
+++ Added more boats
+++ Added attributes to boats
+
+-- No collisions with walls (so please stay inside the track at all times!)
+-- No collectable upgrades on map
+
 **External Libraries Used**:
 * iostream
     * Used for basic input and output
