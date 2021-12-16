@@ -16,14 +16,6 @@
 #include <iostream>
 #include <PPM.h>
 
-// GLuint texturesWall[2];
-
-// GLubyte* water_img;
-// int waterWidth, waterHeight, waterMax;
-
-// GLubyte* buoy_img;
-// int buoyWidth, buoyHeight, buoyMax;
-
 Wall::Wall() {
     vertices = {
         Point3D(0, 0, 0),
@@ -71,6 +63,6 @@ void Wall::draw() {
     glTexCoord2f(0,1);
     glVertex3f(vertices.at(3).x, vertices.at(3).y, vertices.at(3).z);
     glEnd();
-        glPopMatrix();
+    glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
 }

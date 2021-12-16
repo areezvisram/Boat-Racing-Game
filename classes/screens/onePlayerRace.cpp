@@ -34,11 +34,8 @@
 
 Camera camera;
 Boat boatRace;
-// MiniMap miniMapScreen;
 
-// std::chrono::steady_clock raceTimer;
 auto begin = std::chrono::steady_clock::now();
-//std::chrono::duration<double> time_duration;
 std::string duration;
 
 float floor_ambient [4] ={ 1.0f, 1.0, 1.0f,1.0f };
@@ -349,8 +346,6 @@ void OnePlayerRaceScreen::createWindow()
     glutInitWindowPosition(windowPosX, windowPosY);    
     onePlayerRace = glutCreateWindow(windowName);   
     init();
-    // loadingFloor.loadTextures();    
-    // loadingWall.loadTextures();
     map.loadTextures();
     glutReshapeFunc(reshape);
     glutSpecialFunc(specialDown);

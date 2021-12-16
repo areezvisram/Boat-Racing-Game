@@ -16,14 +16,6 @@
 #include <iostream>
 #include <PPM.h>
 
-// GLuint texturesWall[2];
-
-// GLubyte* water_img;
-// int waterWidth, waterHeight, waterMax;
-
-// GLubyte* buoy_img;
-// int buoyWidth, buoyHeight, buoyMax;
-
 RacePlane::RacePlane() {
     vertices = {
         Point3D(0, 0, 0),
@@ -56,21 +48,13 @@ Vec3D calculateNormal2(Point3D vertex1, Point3D vertex2, Point3D vertex3)
 void RacePlane::draw() {
     glPushMatrix();
     glBegin(GL_POLYGON);
-    Vec3D normal = calculateNormal2(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material.ambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material.diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material.specular);
-    glMaterialf(GL_FRONT_AND_BACK, GL_SPECULAR, material.shiny); 
-    glNormal3f(normal.x, normal.y, normal.z);
-    //glTexCoord2f(0,0);
-    glVertex3f(vertices.at(0).x, vertices.at(0).y, vertices.at(0).z);
-    //glTexCoord2f(1,0);
-    glVertex3f(vertices.at(1).x, vertices.at(1).y, vertices.at(1).z);
-    //glTexCoord2f(1,1);
+    Vec3D normal = calculateNormal2(vertices.at(0), vertices.at(1), vertices.at(2)).multiply(-1);    
+    glColor4f(1,1,1,0);
+    glNormal3f(normal.x, normal.y, normal.z);    
+    glVertex3f(vertices.at(0).x, vertices.at(0).y, vertices.at(0).z);    
+    glVertex3f(vertices.at(1).x, vertices.at(1).y, vertices.at(1).z);    
     glVertex3f(vertices.at(2).x, vertices.at(2).y, vertices.at(2).z);
-    //glTexCoord2f(0,1);
     glVertex3f(vertices.at(3).x, vertices.at(3).y, vertices.at(3).z);
     glEnd();
-    glPopMatrix();
-    //glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();    
 }

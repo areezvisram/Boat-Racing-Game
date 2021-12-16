@@ -279,29 +279,25 @@ void boatSelectionDisplay()
     boatSelection.draw();
     glPopMatrix();
 
-    glPushMatrix();
-    leftImage = LoadPPM("images/left.ppm", &leftWidth, &leftHeight, &leftMax);
+    glPushMatrix();    
     glRasterPos2f(-0.20, -0.60);    
     glPixelZoom(-1, 1);
     glDrawPixels(leftWidth, leftHeight, GL_RGB, GL_UNSIGNED_BYTE, leftImage);
     glPopMatrix();
 
-    glPushMatrix();
-    rightImage = LoadPPM("images/right.ppm", &rightWidth, &rightHeight, &rightMax);
+    glPushMatrix();    
     glRasterPos2f(0.40, -0.60);    
     glPixelZoom(-1, 1);
     glDrawPixels(rightWidth, rightHeight, GL_RGB, GL_UNSIGNED_BYTE, rightImage);
     glPopMatrix();
 
-    glPushMatrix();
-    matsImage = LoadPPM("images/materials.ppm", &matsWidth, &matsHeight, &matsMax);
+    glPushMatrix();    
     glRasterPos2f(0.60, -0.90);
     glPixelZoom(-1, 1);
     glDrawPixels(matsWidth, matsHeight, GL_RGB, GL_UNSIGNED_BYTE, matsImage);
     glPopMatrix();
 
     glPushMatrix();
-    doneImage = LoadPPM("images/done.ppm", &doneWidth, &doneHeight, &doneMax);
     glRasterPos2f(0.90, -0.95);
     glPixelZoom(-1, 1);
     glDrawPixels(doneWidth, doneHeight, GL_RGB, GL_UNSIGNED_BYTE, doneImage);
@@ -311,10 +307,7 @@ void boatSelectionDisplay()
 }
 
 void boatSelectionTimer(int value)
-{    
-    // boatSelection.rot.x -= 5;
-    // boatSelection.rot.x = (int)boatSelection.rot.x % 360;    
-    // std::cout << boatSelection.rot.x << "\n";       
+{      
     glutPostRedisplay();    
     glutTimerFunc(17, boatSelectionTimer, 0);
 
@@ -322,6 +315,10 @@ void boatSelectionTimer(int value)
 
 void BoatSelectionScreen::createWindow(bool addHandlers)
 {
+    leftImage = LoadPPM("images/left.ppm", &leftWidth, &leftHeight, &leftMax);
+    rightImage = LoadPPM("images/right.ppm", &rightWidth, &rightHeight, &rightMax);
+    matsImage = LoadPPM("images/materials.ppm", &matsWidth, &matsHeight, &matsMax);
+    doneImage = LoadPPM("images/done.ppm", &doneWidth, &doneHeight, &doneMax);
     if(addHandlers)
     {
         boatSelectionMouseHandler.addHandler(&material0Clicked);

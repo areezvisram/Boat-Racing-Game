@@ -279,8 +279,7 @@ void TwoPlayerRaceScreenDisplayTwo(void)
         glTranslatef(boatRace2.pos.x, boatRace2.pos.y, boatRace2.pos.z);
         glRotatef(boatRace2.rot.x, 1,0,0);
         glRotatef(boatRace2.rot.y, 0,1,0);
-        glRotatef(boatRace2.rot.z, 0,0,1);
-        //glColor3f(0.7, 0.1, 0);
+        glRotatef(boatRace2.rot.z, 0,0,1);        
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace2][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace2][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace2][2]);
@@ -376,11 +375,6 @@ void keyUp2(unsigned char key, int x, int y)
         case 'r':
             if(raceComplete2)
             {
-                // glutDestroyWindow(onePlayerRace);
-                // begin = std::chrono::steady_clock::now();
-                // OnePlayerRaceScreen newScreen = OnePlayerRaceScreen(800, 800, 2000, 50, "Player 1", boatIndexRace, globalMaterialIndexRace);    
-                // newScreen.determineMaterial();
-                // newScreen.createWindow();
                 glutDestroyWindow(twoPlayerRaceScreenTwo);
                 glutDestroyWindow(twoPlayerRaceScreenOne);                
                 raceComplete2 = false;
@@ -391,11 +385,6 @@ void keyUp2(unsigned char key, int x, int y)
             break;          
         case 't':
             raceComplete2 = !raceComplete2;                                             
-            // auto end = std::chrono::steady_clock::now();
-            // std::chrono::duration<double> elapsed = end - begin;
-            // auto x = std::chrono::duration_cast<std::chrono::seconds>(elapsed);
-            // duration = std::to_string(x.count());
-            // duration += " seconds";
             break;        
         case '1':
             winner = "Player One";
