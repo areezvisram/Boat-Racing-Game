@@ -21,6 +21,7 @@ void initGlut()
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH); 
 
     startScreen.createWindow();
+    startScreen.setProperties();
 }
 
 // main function - entry of the program

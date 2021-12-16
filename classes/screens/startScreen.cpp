@@ -17,6 +17,7 @@
 #include <iostream>
 #include <vector>
 
+// Globals
 GLint windowId;
 
 int onePlayerWidth, onePlayerHeight, onePlayerMax;
@@ -26,7 +27,8 @@ int twoPlayerWidth, twoPlayerHeight, twoPlayerMax;
 GLubyte * twoPlayerImage;
 
 BoatSelectionScreen boatSelectionScreen;
-
+float GLOBAL_WIDTH_START;
+float GLOBAL_HEIGHT_START;
 
 StartScreen::StartScreen()
 {
@@ -46,7 +48,13 @@ StartScreen::StartScreen(int width, int height, int windowPosX, int windowPosY, 
     this->windowName = windowName;
 }
 
-// Display function for the save screen
+void StartScreen::setProperties()
+{
+    GLOBAL_HEIGHT_START = height;
+    GLOBAL_WIDTH_START = width;
+}
+
+// Display function for the start screen
 void startScreenDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
@@ -78,15 +86,16 @@ void startScreenDisplay()
     glutSwapBuffers();
 }
 
+// Function if one player is chosen
 void oneBoat()
-{
-    //glutHideWindow();
+{    
     glutDestroyWindow(windowId);
     boatSelectionScreen = BoatSelectionScreen(800, 800, 2000, 50, "Boat Selection", 1, 1);
     boatSelectionScreen.determineNumPlayers();
     boatSelectionScreen.createWindow(true);
 }    
 
+// Function if two player is chosen
 void twoBoats()
 {
     glutDestroyWindow(windowId);
@@ -95,7 +104,7 @@ void twoBoats()
     boatSelectionScreen.createWindow(true);
 }
 
-
+// Mouse handlers for detecting mouse position
 Handler onePlayerClicked = {
     60,
     360,
@@ -114,6 +123,7 @@ Handler twoPlayerClicked = {
 
 InteractionHandler mouseHandler;
 
+// Mouse function
 void startScreenMouse(int button, int state, int x, int y)
 {
     y = 800 - y;
@@ -123,6 +133,21 @@ void startScreenMouse(int button, int state, int x, int y)
     }
 }
 
+// Reshape function
+void reshapeStart(int w, int h)
+{
+    GLOBAL_WIDTH_START = w;
+    GLOBAL_HEIGHT_START = h;
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45, (float)w / h, 1, 1000);
+
+    glMatrixMode(GL_MODELVIEW);
+    glViewport(0, 0, w, h);
+}
+
+// "main" function for this class
 void StartScreen::createWindow()
 {
     mouseHandler.addHandler(&onePlayerClicked);

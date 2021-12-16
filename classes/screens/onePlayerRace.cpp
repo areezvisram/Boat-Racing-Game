@@ -32,6 +32,7 @@
 #include <PPM.h>
 #include <chrono>
 
+// Globals
 Camera camera;
 Boat boatRace;
 
@@ -83,9 +84,8 @@ Map miniMap = Map(miniMapWalls, miniMapFloors, miniPlanes);
 bool keystates[256] = {false};
 bool sKeystates[4] = {false};
 
-// Global variables
-float GLOBAL_WIDTH = 800;
-float GLOBAL_HEIGHT = 800;
+float GLOBAL_WIDTH;
+float GLOBAL_HEIGHT;
 
 float lightPos[2][4] = {
     {-20, 200, -20, 1},
@@ -124,40 +124,13 @@ OnePlayerRaceScreen::OnePlayerRaceScreen(int width, int height, int windowPosX, 
     this->materialIndex = materialIndex;
 }
 
+// Determine material and boat index from previous screen
 void OnePlayerRaceScreen::determineMaterial()
 {
     globalMaterialIndexRace = materialIndex;
     boatIndexRace = boatIndex;
-}
-
-float red[4] = {1,0,0,1};
-float yellow[4] = {1,1,0,1};
-float blue[4] = {0,0,1,1};
-float black[4] = {0,0,0,1};
-
-void drawAxis()
-{
-    glPushMatrix();
-    glLineWidth(2);
-    glBegin(GL_LINES);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, red); // red x
-    glColor3f (1.0, 1.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(5.0, 0.0, 0.0);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow); // yellow y
-    glColor3f (1.0, 1.0, 0.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 5.0, 0.0);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, blue); // blue z
-    glColor3f (0.0, 0.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 0.0, 5.0);
-    glEnd();
-    glPopMatrix();
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black);
+    GLOBAL_WIDTH = width;
+    GLOBAL_HEIGHT = height;
 }
 
 void useCamera(Boat b)
@@ -169,7 +142,7 @@ void useCamera(Boat b)
     gluLookAt(camPos.x, camPos.y, camPos.z, pos.x, pos.y, pos.z, 0,1,0);
 }
 
-// Display function for the save screen
+// Display function
 void onePlayerRaceScreenDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -195,8 +168,7 @@ void onePlayerRaceScreenDisplay()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace.draw();
-        drawAxis();
+        boatRace.draw();        
     glPopMatrix();
 
     glPushMatrix();
@@ -248,6 +220,7 @@ void reshape(int w, int h)
     glViewport(0, 0, w, h);
 }
 
+// Timer function
 void timer(int value)
 {
     boatRace.update(sKeystates[1], sKeystates[3], sKeystates[0], sKeystates[2]);        
@@ -256,11 +229,13 @@ void timer(int value)
     glutTimerFunc(17, timer, 0);
 }
 
+// Key down function
 void keyDown(unsigned char key, int x, int y)
 {
     keystates[tolower(key)] = true;
 }
 
+// Key up function
 void keyUp(unsigned char key, int x, int y)
 {
     keystates[tolower(key)] = false;
@@ -291,6 +266,7 @@ void keyUp(unsigned char key, int x, int y)
     }
 }
 
+// Special key down function
 void specialDown(int key, int x, int y)
 {
     switch(key) {
@@ -309,6 +285,7 @@ void specialDown(int key, int x, int y)
     }
 }
 
+// Special key up function
 void specialUp(int key, int x, int y)
 {
     switch(key) {
@@ -327,6 +304,7 @@ void specialUp(int key, int x, int y)
     }
 }
 
+// Initialize glut
 void init()
 {
     glClearColor(0.6, 0.6, 0.6, 0);
@@ -339,6 +317,7 @@ void init()
     glEnable(GL_SCISSOR_TEST);
 }
 
+// "main" function for this class
 void OnePlayerRaceScreen::createWindow()
 {               
     boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));

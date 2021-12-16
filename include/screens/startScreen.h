@@ -23,6 +23,7 @@ class StartScreen
         const char* windowName;        
 
         void createWindow();
+        void setProperties();
 };
 
 

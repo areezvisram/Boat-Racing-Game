@@ -31,6 +31,8 @@
 #include <map/racePlane.h>
 #include <screens/startScreen.h>
 
+// Globals
+
 Camera camera2;
 Boat boatRace1, boatRace2;
 
@@ -129,38 +131,11 @@ void TwoPlayerRaceScreen::determineMaterial()
     globalMaterialIndexRace2 = material2Index;
     globalBoatIndex1 = boat1Index;
     globalBoatIndex2 = boat2Index;
+    GLOBAL_HEIGHT_2 = height;
+    GLOBAL_WIDTH_2 = width;
 }
 
-float red2[4] = {1,0,0,1};
-float yellow2[4] = {1,1,0,1};
-float blue2[4] = {0,0,1,1};
-float black2[4] = {0,0,0,1};
-
-void drawAxis2()
-{
-    glPushMatrix();
-    glLineWidth(2);
-    glBegin(GL_LINES);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, red2); // red x
-    glColor3f (1.0, 1.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(5.0, 0.0, 0.0);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, yellow2); // yellow y
-    glColor3f (1.0, 1.0, 0.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 5.0, 0.0);
-
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, blue2); // blue z
-    glColor3f (0.0, 0.0, 1.0);
-    glVertex3f(0.0, 0.0, 0.0);
-    glVertex3f(0.0, 0.0, 5.0);
-    glEnd();
-    glPopMatrix();
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, black2);
-}
-
+// Function to have camera follow boat
 void useCamera2(Boat b)
 {
     Point3D pos = b.pos;
@@ -170,7 +145,7 @@ void useCamera2(Boat b)
     gluLookAt(camPos.x, camPos.y, camPos.z, pos.x, pos.y, pos.z, 0,1,0);
 }
 
-// Display function for the save screen
+// Display function for the player one race of two players
 void TwoPlayerRaceScreenDisplayOne()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -195,8 +170,7 @@ void TwoPlayerRaceScreenDisplayOne()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace1][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace1][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace1.draw();
-        drawAxis2();
+        boatRace1.draw();        
     glPopMatrix();
 
     glPushMatrix();
@@ -208,8 +182,7 @@ void TwoPlayerRaceScreenDisplayOne()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace2][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace2][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace2.draw();
-        drawAxis2();
+        boatRace2.draw();        
     glPopMatrix();
 
     glPushMatrix();
@@ -248,12 +221,12 @@ void TwoPlayerRaceScreenDisplayOne()
     glutSwapBuffers();
 }
 
-// Display function
+// Display function for the player two race of two players
 void TwoPlayerRaceScreenDisplayTwo(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
-        glScissor(0,0,800,800);
+    glScissor(0,0,800,800);
     glViewport(0,0,800, 800);
     glLoadIdentity();
 
@@ -271,8 +244,7 @@ void TwoPlayerRaceScreenDisplayTwo(void)
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace1][1]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace1][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
-        boatRace1.draw();
-        drawAxis2();
+        boatRace1.draw();        
     glPopMatrix();
 
     glPushMatrix();
@@ -285,7 +257,6 @@ void TwoPlayerRaceScreenDisplayTwo(void)
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndexRace2][2]);
         glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
         boatRace2.draw();
-        drawAxis2();
     glPopMatrix();
 
 
@@ -341,6 +312,7 @@ void reshape2(int w, int h)
     glViewport(0, 0, w, h);
 }
 
+// Timer function
  void timer2(int value)
 {
     boatRace1.update(sKeystates2[1], sKeystates2[3], sKeystates2[0], sKeystates2[2]);    
@@ -350,6 +322,7 @@ void reshape2(int w, int h)
     glutTimerFunc(17, timer2, 0);
 }
 
+// Timer function for second screen
 void secondTimer(int value)
 {
     boatRace1.update(sKeystates2[1], sKeystates2[3], sKeystates2[0], sKeystates2[2]);    
@@ -359,11 +332,13 @@ void secondTimer(int value)
     glutTimerFunc(17, secondTimer, 0);
 }
 
+// Key down function
 void keyDown2(unsigned char key, int x, int y)
 {
     keystates2[tolower(key)] = true;
 }
 
+// Key up function
 void keyUp2(unsigned char key, int x, int y)
 {
     keystates2[tolower(key)] = false;
@@ -395,6 +370,7 @@ void keyUp2(unsigned char key, int x, int y)
     }
 }
 
+// Special key down function
 void specialDown2(int key, int x, int y)
 {
     switch(key) {
@@ -413,6 +389,7 @@ void specialDown2(int key, int x, int y)
     }
 }
 
+// Special key up function
 void specialUp2(int key, int x, int y)
 {
     switch(key) {
@@ -431,6 +408,7 @@ void specialUp2(int key, int x, int y)
     }
 }
 
+// Initialize screen
 void init2()
 {    
     glutSetWindow(twoPlayerRaceScreenTwo);
@@ -453,6 +431,7 @@ void init2()
     glEnable(GL_CULL_FACE);
 }
 
+// "main" function for this class
 void TwoPlayerRaceScreen::createWindow()
 {        
     boatRace1 = Boat(Point3D(200,10,-2), Boat::BoatType(boat1Index), Vec3D(0, 180, 0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));

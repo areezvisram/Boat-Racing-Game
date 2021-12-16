@@ -34,6 +34,7 @@ Floor::Floor(std::vector<Vec3D> vertices, Material material)
     this->material = material;
 }
 
+// Draw floor
 void Floor::draw() {
     glPushMatrix();
     glBegin(GL_POLYGON);

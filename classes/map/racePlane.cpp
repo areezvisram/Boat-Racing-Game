@@ -35,6 +35,7 @@ RacePlane::RacePlane(std::vector<Point3D> vertices, Material material)
     this->material = material;
 }
 
+// Calculate normal for race planes
 Vec3D calculateNormal2(Point3D vertex1, Point3D vertex2, Point3D vertex3)
 {
     Vec3D edgeOne = Vec3D::createVector(vertex1, vertex2);
@@ -45,6 +46,7 @@ Vec3D calculateNormal2(Point3D vertex1, Point3D vertex2, Point3D vertex3)
     return cross;
 }
 
+// Draw race plane
 void RacePlane::draw() {
     glPushMatrix();
     glBegin(GL_POLYGON);

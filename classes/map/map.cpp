@@ -33,6 +33,7 @@ Map::Map(std::vector<Wall> walls, std::vector<Floor> floors, std::vector<RacePla
     this->racePlanes = racePlanes;
 }
 
+// Load textures for map
 void Map::loadTextures()
 {
     glEnable(GL_TEXTURE_2D);
@@ -56,6 +57,7 @@ void Map::loadTextures()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  
 }
 
+// Render map
 void Map::render()
 {
     for(Floor floor : floors) 

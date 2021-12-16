@@ -18,6 +18,7 @@
 #include <iostream>
 #include <PPM.h>
 
+// Globals
 OnePlayerRaceScreen onePlayerRaceScreen;
 TwoPlayerRaceScreen twoPlayerRaceScreen;
 BoatSelectionScreen playerTwoSelectionScreen;
@@ -70,12 +71,14 @@ BoatSelectionScreen::BoatSelectionScreen(int width, int height, int windowPosX, 
     this->currentPlayer = currentPlayer;
 }
 
+// Determine the number of players that was selected
 void BoatSelectionScreen::determineNumPlayers()
 {
     numberOfPlayers = numPlayers;
     currentPlayerNum = currentPlayer;
 }
 
+// Navigate to race screen based on number of players
 void goToNextScreen()
 {
     if(numberOfPlayers == 1)
@@ -108,6 +111,7 @@ void goToNextScreen()
     }
 }
 
+// Set materials based on mouse input
 void setMaterialZero()
 {
     globalMaterialIndex = 0;
@@ -160,6 +164,7 @@ void increaseBoatIndex()
     glutPostRedisplay();
 }
 
+// Creates handlers to detect mouse position
 Handler material0Clicked = {
     160,
     240,
@@ -227,6 +232,7 @@ Handler doneClicked =
 
 InteractionHandler boatSelectionMouseHandler;
 
+// Mouse function
 void boatSelectionMouse(int button, int state, int x, int y)
 {
     y = 800 - y;
@@ -236,7 +242,7 @@ void boatSelectionMouse(int button, int state, int x, int y)
     }
 }
 
-// Display function for the save screen
+// Display function
 void boatSelectionDisplay()
 {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
@@ -306,6 +312,7 @@ void boatSelectionDisplay()
     glutSwapBuffers();
 }
 
+// Timer function
 void boatSelectionTimer(int value)
 {      
     glutPostRedisplay();    
@@ -313,6 +320,7 @@ void boatSelectionTimer(int value)
 
 }
 
+// "main" for this class
 void BoatSelectionScreen::createWindow(bool addHandlers)
 {
     leftImage = LoadPPM("images/left.ppm", &leftWidth, &leftHeight, &leftMax);
