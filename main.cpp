@@ -18,7 +18,7 @@ StartScreen startScreen = StartScreen(800, 800, 200, 100, "Title Screen");
 // Initialize glut 
 void initGlut()
 {
-    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH); 
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 
     startScreen.createWindow();
     startScreen.setProperties();

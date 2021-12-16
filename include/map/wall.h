@@ -4,6 +4,7 @@
 #include <mathLib3D.h>
 #include <vector>
 #include <material.h>
+#include <plane.h>
 
 class Wall {
     public:
@@ -13,9 +14,12 @@ class Wall {
 
         std::vector<Point3D> vertices;
         Material material;
+        Vec3D normal;
+        float width;
+        float height;
 
         void draw();
-        void loadTextures();
+        Plane toPlane();
 };
 
 #endif
