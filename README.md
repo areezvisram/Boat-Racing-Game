@@ -46,9 +46,9 @@ makefile provided as part of the submission as it has been changed to compile co
 * LEFT_ARROW - Move player one boat to the left
 If 2 player:
 * w - Move player two boat forward
-* a - Move player two boat backwards
-* s - Move player two boat to the right
-* d - Move player two boat to the left
+* s - Move player two boat backwards
+* d - Move player two boat to the right
+* a - Move player two boat to the left
 
 #### **Boat Models**
 * Speedboat - https://free3d.com/3d-model/wakeboard-boat-v1--979173.html
