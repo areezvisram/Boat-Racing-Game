@@ -280,8 +280,8 @@ void boatSelectionDisplay()
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, globalMaterials[globalMaterialIndex][2]);
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 10);
     glTranslatef(boatSelection.pos.x, boatSelection.pos.y, boatSelection.pos.z);
-    glRotatef(-boatSelection.rot.alpha, 1,0,0);
-    glRotatef(-boatSelection.rot.beta, 0,1,0);
+    glRotatef(-boatSelection.rot.beta, 1,0,0);
+    glRotatef(-boatSelection.rot.alpha, 0,1,0);
     // glRotatef(boatSelection.rot.z, 0,0,1);
     boatSelection.draw();
     glPopMatrix();

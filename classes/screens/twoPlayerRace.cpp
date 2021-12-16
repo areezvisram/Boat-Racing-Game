@@ -164,8 +164,8 @@ void TwoPlayerRaceScreenDisplayOne()
     glColor3f(1, 1, 1);   
     glPushMatrix();
         glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
-        glRotatef(-boatRace1.rot.alpha, 1,0,0);
-        glRotatef(-boatRace1.rot.beta, 0,1,0);
+        glRotatef(-boatRace1.rot.beta, 1,0,0);
+        glRotatef(-boatRace1.rot.alpha, 0,1,0);
         // glRotatef(boatRace1.rot.z, 0,0,1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace1][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace1][1]);
@@ -176,8 +176,8 @@ void TwoPlayerRaceScreenDisplayOne()
 
     glPushMatrix();
         glTranslatef(boatRace2.pos.x, boatRace2.pos.y, boatRace2.pos.z);
-        glRotatef(-boatRace2.rot.alpha, 1,0,0);
-        glRotatef(-boatRace2.rot.beta, 0,1,0);
+        glRotatef(-boatRace2.rot.beta, 1,0,0);
+        glRotatef(-boatRace2.rot.alpha, 0,1,0);
         // glRotatef(boatRace2.rot.z, 0,0,1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace2][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace2][1]);
@@ -238,8 +238,8 @@ void TwoPlayerRaceScreenDisplayTwo(void)
     glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb2[0]);  
     glPushMatrix();
         glTranslatef(boatRace1.pos.x, boatRace1.pos.y, boatRace1.pos.z);
-        glRotatef(-boatRace1.rot.alpha, 1,0,0);
-        glRotatef(-boatRace1.rot.beta, 0,1,0);
+        glRotatef(-boatRace1.rot.beta, 1,0,0);
+        glRotatef(-boatRace1.rot.alpha, 0,1,0);
         // glRotatef(boatRace1.rot.z, 0,0,1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace1][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace1][1]);
@@ -250,8 +250,8 @@ void TwoPlayerRaceScreenDisplayTwo(void)
 
     glPushMatrix();
         glTranslatef(boatRace2.pos.x, boatRace2.pos.y, boatRace2.pos.z);
-        glRotatef(-boatRace2.rot.alpha, 1,0,0);
-        glRotatef(-boatRace2.rot.beta, 0,1,0);
+        glRotatef(-boatRace2.rot.beta, 1,0,0);
+        glRotatef(-boatRace2.rot.alpha, 0,1,0);
         // glRotatef(boatRace2.rot.z, 0,0,1);     
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace2][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace2][1]);
@@ -436,7 +436,9 @@ void init2()
 void TwoPlayerRaceScreen::createWindow()
 {        
     boatRace1 = Boat(Point3D(200,10,-2), Boat::BoatType(boat1Index), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    boatRace1.angularAcc = Vec3D(0,0.1,0);
     boatRace2 = Boat(Point3D(200,10,2), Boat::BoatType(boat2Index), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    boatRace2.angularAcc = Vec3D(0,0.1,0);
 
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX + 800, windowPosY);    

@@ -162,8 +162,8 @@ void onePlayerRaceScreenDisplay()
     glColor3f(1, 1, 1);
     glPushMatrix();
         glTranslatef(boatRace.pos.x, boatRace.pos.y, boatRace.pos.z);
-        glRotatef(-boatRace.rot.alpha, 1,0,0);
-        glRotatef(-boatRace.rot.beta, 0,1,0);
+        glRotatef(-boatRace.rot.beta, 1,0,0);
+        glRotatef(-boatRace.rot.alpha, 0,1,0);
         // glRotatef(boatRace.rot.z, 0,0,1);
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, globalMaterials[globalMaterialIndexRace][0]);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, globalMaterials[globalMaterialIndexRace][1]);
@@ -322,6 +322,7 @@ void init()
 void OnePlayerRaceScreen::createWindow()
 {               
     boatRace = Boat(Point3D(200,10,0), Boat::BoatType(boatIndex), DirectionAngle(180,0), Camera(Point3D(-5, 2, 0), Vec3D::createVector(Point3D(-5, 0, 0), Point3D()), 45));
+    boatRace.angularAcc = Vec3D(0,0.1,0);
     glutInitWindowSize(width, height);
     glutInitWindowPosition(windowPosX, windowPosY);    
     onePlayerRace = glutCreateWindow(windowName);   
