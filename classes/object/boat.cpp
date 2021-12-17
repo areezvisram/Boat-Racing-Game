@@ -3,7 +3,7 @@
     #include <OpenGL/gl.h>
     #include <OpenGL/glu.h>
     #include <GLUT/glut.h>
-    #define MAX_SPEED 0.3
+    #define MAX_SPEED 0.4
 #else
     #include <windows.h>
     #include <GL/gl.h>
